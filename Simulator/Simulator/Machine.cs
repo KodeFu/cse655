@@ -25,10 +25,8 @@ namespace Simulator
 
 	public class Machine
 	{
-		const string test1 = "label:	instruction oper1, oper2, oper3	# comment";
-		const string test2 = "# hello comments";
-
 		Dictionary<string, int> regs;   // General registers
+		Dictionary<string, float> floats; // Floating point regs
 		List<int> mem;                  // Memory
 		int maxMem;
 
@@ -36,8 +34,8 @@ namespace Simulator
 		{
 			maxMem = 1024;
 
+			// General Registers
 			regs = new Dictionary<string, int>();
-
 			regs.Add("r0", 0);
 			regs.Add("r1", 0);
 			regs.Add("r2", 0);
@@ -47,8 +45,19 @@ namespace Simulator
 			regs.Add("r6", 0);
 			regs.Add("r7", 7);
 
-			mem = new List<int>();
+			// Floats
+			floats = new Dictionary<string, float>();
+			floats.Add("f0", 0);
+			floats.Add("f1", 0);
+			floats.Add("f2", 0);
+			floats.Add("f3", 0);
+			floats.Add("f4", 0);
+			floats.Add("f5", 0);
+			floats.Add("f6", 0);
+			floats.Add("f7", 7);
 
+			// Memory
+			mem = new List<int>();
 			for (int i = 0; i < maxMem; i++)
 			{
 				mem.Add(0);
