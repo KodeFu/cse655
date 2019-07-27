@@ -25,12 +25,29 @@ namespace Simulator
 
 	public class Machine
 	{
-		Dictionary<string, int> regs;   // General registers
-		Dictionary<string, float> floats; // Floating point regs
-		List<int> mem;                  // Memory
+		public Dictionary<string, int> regs;		// General registers
+		public Dictionary<string, float> floats;	// Floating point regs
+		public List<int> mem;                       // Memory
+		public int ip;								// Instruction pointer
+		public int halt;							// Halt status
+		public int beacon;							// Beacon status
+		public int beaconColor;						// Beacon color
+		public int error;                           // Error
+		public int errorExt;                        // Error extended
+		public int ding;                            // Ding! Ding!
+		public int volume;                          // Ding volume
+		public string display;						// Display text
+
+		
 		int maxMem;
 
+
 		public Machine()
+		{
+			Initialize();
+		}
+
+		public void Initialize()
 		{
 			maxMem = 1024;
 
@@ -43,18 +60,18 @@ namespace Simulator
 			regs.Add("r4", 0);
 			regs.Add("r5", 0);
 			regs.Add("r6", 0);
-			regs.Add("r7", 7);
+			regs.Add("r7", 0);
 
 			// Floats
 			floats = new Dictionary<string, float>();
-			floats.Add("f0", 0);
-			floats.Add("f1", 0);
-			floats.Add("f2", 0);
-			floats.Add("f3", 0);
-			floats.Add("f4", 0);
-			floats.Add("f5", 0);
-			floats.Add("f6", 0);
-			floats.Add("f7", 7);
+			floats.Add("f0", 0.0f);
+			floats.Add("f1", 0.0f);
+			floats.Add("f2", 0.0f);
+			floats.Add("f3", 0.0f);
+			floats.Add("f4", 0.0f);
+			floats.Add("f5", 0.0f);
+			floats.Add("f6", 0.0f);
+			floats.Add("f7", 0.0f);
 
 			// Memory
 			mem = new List<int>();
@@ -62,6 +79,12 @@ namespace Simulator
 			{
 				mem.Add(0);
 			}
+
+			halt = 0;
+			beacon = 0;
+			beaconColor = 0;
+			error = 0;
+			errorExt = 0;
 		}
 
 		public int getMaxMem()
@@ -87,9 +110,7 @@ namespace Simulator
 		}
 
 		public int GetMemoryAtAddress(int address)
-		{
-			int bytes;
-
+		{ 
 			if (address < 0 || address >= maxMem)
 			{
 				return 0;

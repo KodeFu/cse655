@@ -13,6 +13,7 @@ namespace Simulator
     public partial class Simulator : Form
     {
         Machine mach;
+		Execution exec;
         string[] sourceLines;
 
         public Simulator()
@@ -20,6 +21,7 @@ namespace Simulator
             InitializeComponent();
 
             mach = new Machine();
+			exec = new Execution();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -59,8 +61,12 @@ namespace Simulator
         {
 			Instruction instruction = new Instruction();
 
+			// Parse instruction
             string sourceLine = lbExecute.SelectedItem.ToString();
             mach.Parse(sourceLine, ref instruction);
+
+			// Execute instruction
+			exec.Process(instruction, ref mach);
 
             // Copy to controls
             tbComment.Text = instruction.comment;

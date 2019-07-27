@@ -4,6 +4,8 @@
 # Author:
 #   Mudit Vats
 
+        rst
+        rst
         instruction     oper1           # add something
         instruction     oper1, oper2        # load oper1
         instruction     oper1, oper2, oper3 # move something
