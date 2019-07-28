@@ -11,7 +11,11 @@ namespace Simulator
 		public void Process(Instruction i, ref Machine m)
 		{
 			// No instruction, return
-			if (i.instruction == String.Empty) return;
+			if (i.instruction == String.Empty)
+			{
+				m.ip++;
+				return;
+			}
 
 			// Process instruction
 			switch (i.instruction)
@@ -54,9 +58,6 @@ namespace Simulator
 					break;
 				case "insc":
 					insc(ref i, ref m);
-					break;
-				case "insb":
-					insb(ref i, ref m);
 					break;
 				case "pay":
 					pay(ref i, ref m);
@@ -192,32 +193,44 @@ namespace Simulator
 		void bclr(ref Instruction i, ref Machine m)
 		{
 			m.beaconColor = m.regs["r0"];
+			
+			m.ip++;
 		}
 
 		void beac(ref Instruction i, ref Machine m)
 		{
 			m.beacon = m.regs["r0"];
+
+			m.ip++;
 		}
 
 		void log(ref Instruction i, ref Machine m)
 		{
 			m.error = m.regs["r0"];
+
+			m.ip++;
 		}
 
 		void loge(ref Instruction i, ref Machine m)
 		{
 			m.error = m.regs["r0"];
 			m.errorExt = m.regs["r1"];
+
+			m.ip++;
 		}
 
 		void ding(ref Instruction i, ref Machine m)
 		{
 			m.ding = m.regs["r0"];
+
+			m.ip++;
 		}
 
 		void volm(ref Instruction i, ref Machine m)
 		{
 			m.volume = m.regs["r0"];
+
+			m.ip++;
 		}
 
 		void txt(ref Instruction i, ref Machine m)
@@ -232,23 +245,33 @@ namespace Simulator
 
 		void insc(ref Instruction i, ref Machine m)
 		{
-			// clear some credits
+			m.credits = m.regs["r0"];
+
+			m.ip++;
 		}
-		void insb(ref Instruction i, ref Machine m)
-		{
-			// clear some text
-		}
+
 		void pay(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			int amount = m.regs["r0"];
+			m.credits -= amount;
+
+			m.regs["r0"] = m.credits;
+
+			m.ip++;
 		}
 		void bal(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			m.regs["r0"] = m.credits;
+
+			m.ip++;
 		}
 		void jpot(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			m.regs["r0"] = m.credits;
+
+			m.credits = 0;
+
+			m.ip++;
 		}
 		void pull(ref Instruction i, ref Machine m)
 		{
@@ -300,6 +323,8 @@ namespace Simulator
 			string b = i.field[1];
 
 			m.regs[a] = m.regs[b];
+
+			m.ip++;
 		}
 		void regi(ref Instruction i, ref Machine m)
 		{
@@ -307,6 +332,8 @@ namespace Simulator
 			string b = i.field[1];
 
 			m.regs[a] = int.Parse(b);
+
+			m.ip++;
 		}
 		void regf(ref Instruction i, ref Machine m)
 		{
@@ -314,6 +341,8 @@ namespace Simulator
 			string b = i.field[1];
 
 			m.floats[a] = float.Parse(b);
+
+			m.ip++;
 		}
 		void memr(ref Instruction i, ref Machine m)
 		{
@@ -321,6 +350,8 @@ namespace Simulator
 			string b = i.field[1];
 
 			m.regs[a] = m.mem[int.Parse(b)];
+
+			m.ip++;
 		}
 		void memm(ref Instruction i, ref Machine m)
 		{
@@ -328,6 +359,8 @@ namespace Simulator
 			string b = i.field[1];
 
 			m.mem[int.Parse(a)] = m.mem[int.Parse(b)];
+
+			m.ip++;
 		}
 		void memi(ref Instruction i, ref Machine m)
 		{
@@ -335,10 +368,14 @@ namespace Simulator
 			string b = i.field[1];
 			
 			m.mem[m.regs[a]] = int.Parse(b);
+
+			m.ip++;
 		}
 		void br(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+
+			m.ip = m.labels[a];
 		}
 		void bls(ref Instruction i, ref Machine m)
 		{
@@ -362,43 +399,95 @@ namespace Simulator
 		}
 		void cmp(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+			string b = i.field[1];
+
+			if (m.regs[a] == m.regs[b]) m.compare = 0;
+			else if (m.regs[a] < m.regs[b]) m.compare = 1;
+			else if (m.regs[a] > m.regs[b]) m.compare = 2;
+
+			m.ip++;
 		}
 		void rand(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			Random r = new Random();
+			int random = r.Next(100);
+
+			m.regs["r0"] = random;
+
+			m.ip++;
 		}
 		void addr(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.regs[a] = m.regs[a] + m.regs[b];
+
+			m.ip++;
 		}
 		void subr(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.regs[a] = m.regs[a] - m.regs[b];
+
+			m.ip++;
 		}
 		void mulr(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.regs[a] = m.regs[a] * m.regs[b];
+
+			m.ip++;
 		}
 		void divr(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.regs[a] = m.regs[a] / m.regs[b];
+
+			m.ip++;
 		}
 		void addf(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.floats[a] = m.floats[a] + m.floats[b];
+
+			m.ip++;
 		}
 		void subf(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.floats[a] = m.floats[a] - m.floats[b];
+
+			m.ip++;
 		}
 		void divf(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.floats[a] = m.floats[a] / m.floats[b];
+
+			m.ip++;
 		}
 		void mulf(ref Instruction i, ref Machine m)
 		{
-			m.regs["r0"] = m.regs["r0"] * m.regs["r1"];
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.floats[a] = m.floats[a] * m.floats[b];
+
+			m.ip++;
 
 		}
 	}

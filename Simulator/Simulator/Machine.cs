@@ -28,7 +28,9 @@ namespace Simulator
 		public Dictionary<string, int> regs;		// General registers
 		public Dictionary<string, float> floats;	// Floating point regs
 		public List<int> mem;                       // Memory
-		public int ip;								// Instruction pointer
+		public int ip;                              // Instruction pointer
+		public int compare;
+		public int credits;                         // Machine credits
 		public int halt;							// Halt status
 		public int beacon;							// Beacon status
 		public int beaconColor;						// Beacon color
@@ -36,15 +38,17 @@ namespace Simulator
 		public int errorExt;                        // Error extended
 		public int ding;                            // Ding! Ding!
 		public int volume;                          // Ding volume
-		public string display;						// Display text
-
+		public string display;                      // Display text
 		
 		int maxMem;
+
+		public Dictionary<string, int> labels;
 
 
 		public Machine()
 		{
 			Initialize();
+			labels = new Dictionary<string, int>();
 		}
 
 		public void Initialize()
@@ -80,6 +84,9 @@ namespace Simulator
 				mem.Add(i*2); // putting some default value in there
 			}
 
+			ip = 0;
+			compare = 0;
+			credits = 0;
 			halt = 0;
 			beacon = 0;
 			beaconColor = 0;
