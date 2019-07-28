@@ -111,6 +111,8 @@
 			this.lEditFilename = new System.Windows.Forms.Label();
 			this.tbEdit = new System.Windows.Forms.TextBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -189,7 +191,9 @@
 			// runToolStripMenuItem
 			// 
 			this.runToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.executeToolStripMenuItem});
+            this.executeToolStripMenuItem,
+            this.stepToolStripMenuItem,
+            this.resetToolStripMenuItem});
 			this.runToolStripMenuItem.Name = "runToolStripMenuItem";
 			this.runToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
 			this.runToolStripMenuItem.Text = "&Run";
@@ -936,6 +940,20 @@
 			this.tabPage2.Text = "Code Execution";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
+			// stepToolStripMenuItem
+			// 
+			this.stepToolStripMenuItem.Name = "stepToolStripMenuItem";
+			this.stepToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.stepToolStripMenuItem.Text = "&Step";
+			this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
+			// 
+			// resetToolStripMenuItem
+			// 
+			this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
+			this.resetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.resetToolStripMenuItem.Text = "&Reset";
+			this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
+			// 
 			// Simulator
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1051,6 +1069,8 @@
 		private System.Windows.Forms.TextBox tbIP;
 		private System.Windows.Forms.Label label32;
 		private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem stepToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem resetToolStripMenuItem;
 	}
 }
 

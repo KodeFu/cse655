@@ -57,14 +57,7 @@ namespace Simulator
 
         private void tbMain_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabMain.SelectedIndex == 0)
-            {
-                //MessageBox.Show("First!");
-            }
-            else
-            {
-                //MessageBox.Show("Second!");
-            }
+
         }
 
 		private void executeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -180,6 +173,16 @@ namespace Simulator
 				System.IO.File.WriteAllText(dlg.FileName, tbEdit.Text);
 				lEditFilename.Text = dlg.FileName;
 			}
+		}
+
+		private void stepToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			btnStep_Click(null, null);
+		}
+
+		private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			btnReset_Click(null, null);
 		}
 	}
 }
