@@ -17,363 +17,374 @@ namespace Simulator
 			switch (i.instruction)
 			{
 				case "rst":
-					rst(ref m);
+					rst(ref i, ref m);
 					break;
 				case "rbt":
-					rbt(ref m);
+					rbt(ref i, ref m);
 					break;
 				case "halt":
-					halt(ref m);
+					halt(ref i, ref m);
 					break;
 				case "off":
-					off(ref m);
+					off(ref i, ref m);
 					break;
 				case "bclr":
-					bclr(ref m);
+					bclr(ref i, ref m);
 					break;
 				case "beac":
-					beac(ref m);
+					beac(ref i, ref m);
 					break;
 				case "log":
-					log(ref m);
+					log(ref i, ref m);
 					break;
 				case "loge":
-					loge(ref m);
+					loge(ref i, ref m);
 					break;
 				case "ding":
-					ding(ref m);
+					ding(ref i, ref m);
 					break;
 				case "volm":
-					volm(ref m);
+					volm(ref i, ref m);
 					break;
 				case "txt":
-					txt(ref m);
+					txt(ref i, ref m);
 					break;
 				case "clr":
-					clr(ref m);
+					clr(ref i, ref m);
 					break;
 				case "insc":
-					insc(ref m);
+					insc(ref i, ref m);
 					break;
 				case "insb":
-					insb(ref m);
+					insb(ref i, ref m);
 					break;
 				case "pay":
-					pay(ref m);
+					pay(ref i, ref m);
 					break;
 				case "bal":
-					bal(ref m);
+					bal(ref i, ref m);
 					break;
 				case "jpot":
-					jpot(ref m);
+					jpot(ref i, ref m);
 					break;
 				case "pull":
-					pull(ref m);
+					pull(ref i, ref m);
 					break;
 				case "btnp1":
-					btnp1(ref m);
+					btnp1(ref i, ref m);
 					break;
 				case "btnp2":
-					btnp2(ref m);
+					btnp2(ref i, ref m);
 					break;
 				case "btnp3":
-					btnp3(ref m);
+					btnp3(ref i, ref m);
 					break;
 				case "spin":
-					spin(ref m);
+					spin(ref i, ref m);
 					break;
 				case "stop":
-					stop(ref m);
+					stop(ref i, ref m);
 					break;
 				case "wait":
-					wait(ref m);
+					wait(ref i, ref m);
 					break;
 				case "wpos":
-					wpos(ref m);
+					wpos(ref i, ref m);
 					break;
 				case "winf":
-					winf(ref m);
+					winf(ref i, ref m);
 					break;
 				case "payf":
-					payf(ref m);
+					payf(ref i, ref m);
 					break;
 				case "pbck":
-					pbck(ref m);
+					pbck(ref i, ref m);
 					break;
 				case "regr":
-					regr(ref m);
+					regr(ref i, ref m);
 					break;
 				case "regi":
-					regi(ref m);
+					regi(ref i, ref m);
 					break;
 				case "memr":
-					memr(ref m);
+					memr(ref i, ref m);
 					break;
 				case "memm":
-					memm(ref m);
+					memm(ref i, ref m);
 					break;
 				case "memi":
-					memi(ref m);
+					memi(ref i, ref m);
 					break;
 				case "br":
-					br(ref m);
+					br(ref i, ref m);
 					break;
 				case "bls":
-					bls(ref m);
+					bls(ref i, ref m);
 					break;
 				case "blse":
-					blse(ref m);
+					blse(ref i, ref m);
 					break;
 				case "bgr":
-					bgr(ref m);
+					bgr(ref i, ref m);
 					break;
 				case "bgre":
-					bgre(ref m);
+					bgre(ref i, ref m);
 					break;
 				case "jmp":
-					jmp(ref m);
+					jmp(ref i, ref m);
 					break;
 				case "cmp":
-					cmp(ref m);
+					cmp(ref i, ref m);
 					break;
 				case "rand":
-					rand(ref m);
+					rand(ref i, ref m);
 					break;
 				case "addr":
-					addr(ref m);
+					addr(ref i, ref m);
 					break;
 				case "subr":
-					subr(ref m);
+					subr(ref i, ref m);
 					break;
 				case "mulr":
-					mulr(ref m);
+					mulr(ref i, ref m);
 					break;
 				case "divr":
-					divr(ref m);
+					divr(ref i, ref m);
 					break;
 				case "addf":
-					addf(ref m);
+					addf(ref i, ref m);
 					break;
 				case "subf":
-					subf(ref m);
+					subf(ref i, ref m);
 					break;
 				case "divf":
-					divf(ref m);
+					divf(ref i, ref m);
 					break;
 				case "mulf":
-					mulf(ref m);
+					mulf(ref i, ref m);
 					break;
 			}
 		}
 
-		void rst(ref Machine m)
+		void rst(ref Instruction i, ref Machine m)
 		{
 			m.Initialize();
 		}
 
-		void rbt(ref Machine m)
+		void rbt(ref Instruction i, ref Machine m)
 		{
 			m.Initialize();
 		}
 
-		void halt(ref Machine m)
+		void halt(ref Instruction i, ref Machine m)
 		{
 			m.halt = 1;
 		}
 
-		void off(ref Machine m)
+		void off(ref Instruction i, ref Machine m)
 		{
 			m.halt = 1;
 		}
 
-		void bclr(ref Machine m)
+		void bclr(ref Instruction i, ref Machine m)
 		{
 			m.beaconColor = m.regs["r0"];
 		}
 
-		void beac(ref Machine m)
+		void beac(ref Instruction i, ref Machine m)
 		{
 			m.beacon = m.regs["r0"];
 		}
 
-		void log(ref Machine m)
+		void log(ref Instruction i, ref Machine m)
 		{
 			m.error = m.regs["r0"];
 		}
 
-		void loge(ref Machine m)
+		void loge(ref Instruction i, ref Machine m)
 		{
 			m.error = m.regs["r0"];
 			m.errorExt = m.regs["r1"];
 		}
 
-		void ding(ref Machine m)
+		void ding(ref Instruction i, ref Machine m)
 		{
 			m.ding = m.regs["r0"];
 		}
 
-		void volm(ref Machine m)
+		void volm(ref Instruction i, ref Machine m)
 		{
 			m.volume = m.regs["r0"];
 		}
 
-		void txt(ref Machine m)
+		void txt(ref Instruction i, ref Machine m)
 		{
 			// copy some text
 		}
 
-		void clr(ref Machine m)
+		void clr(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
 
-		void insc(ref Machine m)
+		void insc(ref Instruction i, ref Machine m)
+		{
+			// clear some credits
+		}
+		void insb(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void insb(ref Machine m)
+		void pay(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void pay(ref Machine m)
+		void bal(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void bal(ref Machine m)
+		void jpot(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void jpot(ref Machine m)
+		void pull(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void pull(ref Machine m)
+		void btnp1(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void btnp1(ref Machine m)
+		void btnp2(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void btnp2(ref Machine m)
+		void btnp3(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void btnp3(ref Machine m)
+		void spin(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void spin(ref Machine m)
+		void stop(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void stop(ref Machine m)
+		void wait(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void wait(ref Machine m)
+		void wpos(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void wpos(ref Machine m)
+		void winf(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void winf(ref Machine m)
+		void payf(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void payf(ref Machine m)
+		void pbck(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void pbck(ref Machine m)
+		void regr(ref Instruction i, ref Machine m)
+		{
+			string regA = i.field[0];
+			string regB = i.field[1];
+
+			m.regs[regA] = m.regs[regB];
+		}
+		void regi(ref Instruction i, ref Machine m)
+		{
+			string regA = i.field[0];
+			string regB = i.field[1];
+
+			m.regs[regA] = int.Parse(regB);
+		}
+		void regf(ref Instruction i, ref Machine m)
+		{
+			//m.regs["f0"]
+		}
+		void memr(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void regr(ref Machine m)
+		void memm(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void regi(ref Machine m)
+		void memi(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void memr(ref Machine m)
+		void br(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void memm(ref Machine m)
+		void bls(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void memi(ref Machine m)
+		void blse(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void br(ref Machine m)
+		void bgr(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void bls(ref Machine m)
+		void bgre(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void blse(ref Machine m)
+		void jmp(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void bgr(ref Machine m)
+		void cmp(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void bgre(ref Machine m)
+		void rand(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void jmp(ref Machine m)
+		void addr(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void cmp(ref Machine m)
+		void subr(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void rand(ref Machine m)
+		void mulr(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void addr(ref Machine m)
+		void divr(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void subr(ref Machine m)
+		void addf(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void mulr(ref Machine m)
+		void subf(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void divr(ref Machine m)
+		void divf(ref Instruction i, ref Machine m)
 		{
 			// clear some text
 		}
-		void addf(ref Machine m)
+		void mulf(ref Instruction i, ref Machine m)
 		{
-			// clear some text
-		}
-		void subf(ref Machine m)
-		{
-			// clear some text
-		}
-		void divf(ref Machine m)
-		{
-			// clear some text
-		}
-		void mulf(ref Machine m)
-		{
-			// clear some text
+			m.regs["r0"] = m.regs["r0"] * m.regs["r1"];
+
 		}
 	}
 }

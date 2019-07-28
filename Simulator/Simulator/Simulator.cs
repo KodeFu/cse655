@@ -14,7 +14,8 @@ namespace Simulator
     {
         Machine mach;
 		Execution exec;
-        string[] sourceLines;
+        
+		string filename;
 
         public Simulator()
         {
@@ -30,12 +31,12 @@ namespace Simulator
             dlg.Filter = "Assembly files (*.asm, *.txt) | *.asm; *.txt;";
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                sourceLines = System.IO.File.ReadAllLines(dlg.FileName);
-                lFilename.Text = dlg.FileName;
-
                 tbEdit.Text = System.IO.File.ReadAllText(dlg.FileName);
                 lEditFilename.Text = dlg.FileName;
-            }
+
+				filename = dlg.FileName;
+
+			}
 
         }
 
@@ -85,6 +86,25 @@ namespace Simulator
 			{
 				lbMemory.Items.Add("0x" + i.ToString("X8") + "    " + "0x" + mach.GetMemoryAtAddress(i).ToString("X8"));
 			}
+
+			tbR0.Text = mach.regs["r0"].ToString();
+			tbR1.Text = mach.regs["r1"].ToString();
+			tbR2.Text = mach.regs["r2"].ToString();
+			tbR3.Text = mach.regs["r2"].ToString();
+			tbR4.Text = mach.regs["r2"].ToString();
+			tbR5.Text = mach.regs["r2"].ToString();
+			tbR6.Text = mach.regs["r2"].ToString();
+			tbR7.Text = mach.regs["r2"].ToString();
+
+			tbF0.Text = mach.floats["f0"].ToString();
+			tbF1.Text = mach.floats["f1"].ToString();
+			tbF2.Text = mach.floats["f2"].ToString();
+			tbF3.Text = mach.floats["f3"].ToString();
+			tbF4.Text = mach.floats["f4"].ToString();
+			tbF5.Text = mach.floats["f5"].ToString();
+			tbF6.Text = mach.floats["f6"].ToString();
+			tbF7.Text = mach.floats["f7"].ToString();
+
 		}
 
         private void tbMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -103,12 +123,16 @@ namespace Simulator
 		{
 			lbExecute.CustomTabOffsets.Add(16);
 			lbExecute.UseCustomTabOffsets = true;
+
+			lExecuteFilename.Text = filename;
+			string[] sourceLines = System.IO.File.ReadAllLines(filename);
 			foreach (string s in sourceLines)
 			{
 				lbExecute.Items.Add(s);
 			}
 
 			lbExecute.SetSelected(0, true);
+	
 
 			tabMain.SelectedIndex = 1;
 			lbExecute.SelectedIndex = 0;

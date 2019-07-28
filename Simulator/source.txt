@@ -5,7 +5,8 @@
 #   Mudit Vats
 
         rst
-        rst
+        regi            r1, 10          # move 10 into r1
+        regr            r0, r1          # move r1 into r0
         instruction     oper1           # add something
         instruction     oper1, oper2        # load oper1
         instruction     oper1, oper2, oper3 # move something
