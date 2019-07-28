@@ -379,19 +379,39 @@ namespace Simulator
 		}
 		void bls(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+
+			if (m.compare == 1)
+			{
+				m.ip = m.labels[a];
+			}
 		}
 		void blse(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+
+			if ((m.compare == 0) || (m.compare == 1))
+			{
+				m.ip = m.labels[a];
+			}
 		}
 		void bgr(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+
+			if (m.compare == 2)
+			{
+				m.ip = m.labels[a];
+			}
 		}
 		void bgre(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+
+			if ((m.compare == 0) || (m.compare == 2))
+			{
+				m.ip = m.labels[a];
+			}
 		}
 		void jmp(ref Instruction i, ref Machine m)
 		{

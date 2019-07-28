@@ -89,7 +89,7 @@ namespace Simulator
 				}
 
 				// Add to the list
-				lbExecute.Items.Add(s);
+				lbExecute.Items.Add(lineNum.ToString("D2") + ": " + s);
 
 				lineNum++;
 			}
@@ -115,7 +115,7 @@ namespace Simulator
 			lbExecute.SelectedIndex = mach.ip;
 
 			// Parse instruction
-			string sourceLine = lbExecute.SelectedItem.ToString();
+			string sourceLine = lbExecute.SelectedItem.ToString().Substring(4);
 			mach.Parse(sourceLine, ref instruction);
 
 			// Execute instruction
@@ -156,6 +156,9 @@ namespace Simulator
 			tbF5.Text = mach.floats["f5"].ToString();
 			tbF6.Text = mach.floats["f6"].ToString();
 			tbF7.Text = mach.floats["f7"].ToString();
+
+			tbIP.Text = mach.ip.ToString();
+			tbHalt.Text = mach.halt.ToString();
 
 		}
 

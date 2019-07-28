@@ -33,6 +33,7 @@
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,23 +54,23 @@
 			this.tbInstruction = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.lbMemory = new System.Windows.Forms.ListBox();
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.tbVol = new System.Windows.Forms.TextBox();
 			this.label17 = new System.Windows.Forms.Label();
 			this.label16 = new System.Windows.Forms.Label();
 			this.label25 = new System.Windows.Forms.Label();
-			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.tbDing = new System.Windows.Forms.TextBox();
 			this.label26 = new System.Windows.Forms.Label();
-			this.textBox3 = new System.Windows.Forms.TextBox();
+			this.tbHalt = new System.Windows.Forms.TextBox();
 			this.label27 = new System.Windows.Forms.Label();
-			this.textBox4 = new System.Windows.Forms.TextBox();
+			this.tbBeac = new System.Windows.Forms.TextBox();
 			this.label28 = new System.Windows.Forms.Label();
-			this.textBox5 = new System.Windows.Forms.TextBox();
+			this.tbClr = new System.Windows.Forms.TextBox();
 			this.label29 = new System.Windows.Forms.Label();
-			this.textBox6 = new System.Windows.Forms.TextBox();
+			this.tbErr = new System.Windows.Forms.TextBox();
 			this.label30 = new System.Windows.Forms.Label();
-			this.textBox7 = new System.Windows.Forms.TextBox();
+			this.tbErrX = new System.Windows.Forms.TextBox();
 			this.label31 = new System.Windows.Forms.Label();
-			this.textBox8 = new System.Windows.Forms.TextBox();
+			this.tbIP = new System.Windows.Forms.TextBox();
 			this.label32 = new System.Windows.Forms.Label();
 			this.tbF7 = new System.Windows.Forms.TextBox();
 			this.label15 = new System.Windows.Forms.Label();
@@ -110,7 +111,6 @@
 			this.lEditFilename = new System.Windows.Forms.Label();
 			this.tbEdit = new System.Windows.Forms.TextBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -156,26 +156,33 @@
 			// openToolStripMenuItem
 			// 
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
 			this.openToolStripMenuItem.Text = "&Open";
 			this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
 			// 
 			// saveToolStripMenuItem
 			// 
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
 			this.saveToolStripMenuItem.Text = "&Save";
 			this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+			// 
+			// saveAsToolStripMenuItem
+			// 
+			this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+			this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+			this.saveAsToolStripMenuItem.Text = "Save &As";
+			this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(111, 6);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
 			this.exitToolStripMenuItem.Text = "E&xit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
 			// 
@@ -335,23 +342,23 @@
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.lbMemory);
-			this.groupBox2.Controls.Add(this.textBox1);
+			this.groupBox2.Controls.Add(this.tbVol);
 			this.groupBox2.Controls.Add(this.label17);
 			this.groupBox2.Controls.Add(this.label16);
 			this.groupBox2.Controls.Add(this.label25);
-			this.groupBox2.Controls.Add(this.textBox2);
+			this.groupBox2.Controls.Add(this.tbDing);
 			this.groupBox2.Controls.Add(this.label26);
-			this.groupBox2.Controls.Add(this.textBox3);
+			this.groupBox2.Controls.Add(this.tbHalt);
 			this.groupBox2.Controls.Add(this.label27);
-			this.groupBox2.Controls.Add(this.textBox4);
+			this.groupBox2.Controls.Add(this.tbBeac);
 			this.groupBox2.Controls.Add(this.label28);
-			this.groupBox2.Controls.Add(this.textBox5);
+			this.groupBox2.Controls.Add(this.tbClr);
 			this.groupBox2.Controls.Add(this.label29);
-			this.groupBox2.Controls.Add(this.textBox6);
+			this.groupBox2.Controls.Add(this.tbErr);
 			this.groupBox2.Controls.Add(this.label30);
-			this.groupBox2.Controls.Add(this.textBox7);
+			this.groupBox2.Controls.Add(this.tbErrX);
 			this.groupBox2.Controls.Add(this.label31);
-			this.groupBox2.Controls.Add(this.textBox8);
+			this.groupBox2.Controls.Add(this.tbIP);
 			this.groupBox2.Controls.Add(this.label32);
 			this.groupBox2.Controls.Add(this.tbF7);
 			this.groupBox2.Controls.Add(this.label15);
@@ -404,14 +411,14 @@
 			this.lbMemory.Size = new System.Drawing.Size(226, 200);
 			this.lbMemory.TabIndex = 19;
 			// 
-			// textBox1
+			// tbVol
 			// 
-			this.textBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBox1.Location = new System.Drawing.Point(308, 209);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(70, 20);
-			this.textBox1.TabIndex = 55;
+			this.tbVol.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbVol.Location = new System.Drawing.Point(308, 209);
+			this.tbVol.Name = "tbVol";
+			this.tbVol.ReadOnly = true;
+			this.tbVol.Size = new System.Drawing.Size(70, 20);
+			this.tbVol.TabIndex = 55;
 			// 
 			// label17
 			// 
@@ -440,14 +447,14 @@
 			this.label25.TabIndex = 54;
 			this.label25.Text = "vol";
 			// 
-			// textBox2
+			// tbDing
 			// 
-			this.textBox2.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBox2.Location = new System.Drawing.Point(308, 183);
-			this.textBox2.Name = "textBox2";
-			this.textBox2.ReadOnly = true;
-			this.textBox2.Size = new System.Drawing.Size(70, 20);
-			this.textBox2.TabIndex = 53;
+			this.tbDing.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbDing.Location = new System.Drawing.Point(308, 183);
+			this.tbDing.Name = "tbDing";
+			this.tbDing.ReadOnly = true;
+			this.tbDing.Size = new System.Drawing.Size(70, 20);
+			this.tbDing.TabIndex = 53;
 			// 
 			// label26
 			// 
@@ -458,14 +465,14 @@
 			this.label26.TabIndex = 52;
 			this.label26.Text = "ding";
 			// 
-			// textBox3
+			// tbHalt
 			// 
-			this.textBox3.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBox3.Location = new System.Drawing.Point(308, 53);
-			this.textBox3.Name = "textBox3";
-			this.textBox3.ReadOnly = true;
-			this.textBox3.Size = new System.Drawing.Size(70, 20);
-			this.textBox3.TabIndex = 51;
+			this.tbHalt.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbHalt.Location = new System.Drawing.Point(308, 53);
+			this.tbHalt.Name = "tbHalt";
+			this.tbHalt.ReadOnly = true;
+			this.tbHalt.Size = new System.Drawing.Size(70, 20);
+			this.tbHalt.TabIndex = 51;
 			// 
 			// label27
 			// 
@@ -476,14 +483,14 @@
 			this.label27.TabIndex = 50;
 			this.label27.Text = "halt";
 			// 
-			// textBox4
+			// tbBeac
 			// 
-			this.textBox4.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBox4.Location = new System.Drawing.Point(308, 79);
-			this.textBox4.Name = "textBox4";
-			this.textBox4.ReadOnly = true;
-			this.textBox4.Size = new System.Drawing.Size(70, 20);
-			this.textBox4.TabIndex = 49;
+			this.tbBeac.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbBeac.Location = new System.Drawing.Point(308, 79);
+			this.tbBeac.Name = "tbBeac";
+			this.tbBeac.ReadOnly = true;
+			this.tbBeac.Size = new System.Drawing.Size(70, 20);
+			this.tbBeac.TabIndex = 49;
 			// 
 			// label28
 			// 
@@ -494,14 +501,14 @@
 			this.label28.TabIndex = 48;
 			this.label28.Text = "beac";
 			// 
-			// textBox5
+			// tbClr
 			// 
-			this.textBox5.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBox5.Location = new System.Drawing.Point(308, 105);
-			this.textBox5.Name = "textBox5";
-			this.textBox5.ReadOnly = true;
-			this.textBox5.Size = new System.Drawing.Size(70, 20);
-			this.textBox5.TabIndex = 47;
+			this.tbClr.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbClr.Location = new System.Drawing.Point(308, 105);
+			this.tbClr.Name = "tbClr";
+			this.tbClr.ReadOnly = true;
+			this.tbClr.Size = new System.Drawing.Size(70, 20);
+			this.tbClr.TabIndex = 47;
 			// 
 			// label29
 			// 
@@ -512,14 +519,14 @@
 			this.label29.TabIndex = 46;
 			this.label29.Text = "bclr";
 			// 
-			// textBox6
+			// tbErr
 			// 
-			this.textBox6.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBox6.Location = new System.Drawing.Point(308, 131);
-			this.textBox6.Name = "textBox6";
-			this.textBox6.ReadOnly = true;
-			this.textBox6.Size = new System.Drawing.Size(70, 20);
-			this.textBox6.TabIndex = 45;
+			this.tbErr.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbErr.Location = new System.Drawing.Point(308, 131);
+			this.tbErr.Name = "tbErr";
+			this.tbErr.ReadOnly = true;
+			this.tbErr.Size = new System.Drawing.Size(70, 20);
+			this.tbErr.TabIndex = 45;
 			// 
 			// label30
 			// 
@@ -530,14 +537,14 @@
 			this.label30.TabIndex = 44;
 			this.label30.Text = "err";
 			// 
-			// textBox7
+			// tbErrX
 			// 
-			this.textBox7.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBox7.Location = new System.Drawing.Point(308, 157);
-			this.textBox7.Name = "textBox7";
-			this.textBox7.ReadOnly = true;
-			this.textBox7.Size = new System.Drawing.Size(70, 20);
-			this.textBox7.TabIndex = 43;
+			this.tbErrX.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbErrX.Location = new System.Drawing.Point(308, 157);
+			this.tbErrX.Name = "tbErrX";
+			this.tbErrX.ReadOnly = true;
+			this.tbErrX.Size = new System.Drawing.Size(70, 20);
+			this.tbErrX.TabIndex = 43;
 			// 
 			// label31
 			// 
@@ -548,14 +555,14 @@
 			this.label31.TabIndex = 42;
 			this.label31.Text = "errX";
 			// 
-			// textBox8
+			// tbIP
 			// 
-			this.textBox8.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBox8.Location = new System.Drawing.Point(308, 27);
-			this.textBox8.Name = "textBox8";
-			this.textBox8.ReadOnly = true;
-			this.textBox8.Size = new System.Drawing.Size(70, 20);
-			this.textBox8.TabIndex = 41;
+			this.tbIP.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbIP.Location = new System.Drawing.Point(308, 27);
+			this.tbIP.Name = "tbIP";
+			this.tbIP.ReadOnly = true;
+			this.tbIP.Size = new System.Drawing.Size(70, 20);
+			this.tbIP.TabIndex = 41;
 			// 
 			// label32
 			// 
@@ -929,13 +936,6 @@
 			this.tabPage2.Text = "Code Execution";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
-			// saveAsToolStripMenuItem
-			// 
-			this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-			this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.saveAsToolStripMenuItem.Text = "Save &As";
-			this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
-			// 
 			// Simulator
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1034,21 +1034,21 @@
 		private System.Windows.Forms.Label label23;
 		private System.Windows.Forms.TextBox tbF0;
 		private System.Windows.Forms.Label label24;
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox tbVol;
 		private System.Windows.Forms.Label label25;
-		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.TextBox tbDing;
 		private System.Windows.Forms.Label label26;
-		private System.Windows.Forms.TextBox textBox3;
+		private System.Windows.Forms.TextBox tbHalt;
 		private System.Windows.Forms.Label label27;
-		private System.Windows.Forms.TextBox textBox4;
+		private System.Windows.Forms.TextBox tbBeac;
 		private System.Windows.Forms.Label label28;
-		private System.Windows.Forms.TextBox textBox5;
+		private System.Windows.Forms.TextBox tbClr;
 		private System.Windows.Forms.Label label29;
-		private System.Windows.Forms.TextBox textBox6;
+		private System.Windows.Forms.TextBox tbErr;
 		private System.Windows.Forms.Label label30;
-		private System.Windows.Forms.TextBox textBox7;
+		private System.Windows.Forms.TextBox tbErrX;
 		private System.Windows.Forms.Label label31;
-		private System.Windows.Forms.TextBox textBox8;
+		private System.Windows.Forms.TextBox tbIP;
 		private System.Windows.Forms.Label label32;
 		private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
 	}
