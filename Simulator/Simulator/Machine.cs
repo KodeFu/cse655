@@ -77,7 +77,7 @@ namespace Simulator
 			mem = new List<int>();
 			for (int i = 0; i < maxMem; i++)
 			{
-				mem.Add(0);
+				mem.Add(i*2); // putting some default value in there
 			}
 
 			halt = 0;

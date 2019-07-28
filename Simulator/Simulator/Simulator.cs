@@ -23,7 +23,12 @@ namespace Simulator
 
             mach = new Machine();
 			exec = new Execution();
-        }
+
+			for (int i = 0; i < mach.getMaxMem(); i++)
+			{
+				lbMemory.Items.Add("0x" + i.ToString("X8") + "    " + "0x" + mach.GetMemoryAtAddress(i).ToString("X8"));
+			}
+		}
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -84,17 +89,17 @@ namespace Simulator
 
 			for (int i = 0; i < mach.getMaxMem(); i++)
 			{
-				lbMemory.Items.Add("0x" + i.ToString("X8") + "    " + "0x" + mach.GetMemoryAtAddress(i).ToString("X8"));
+				lbMemory.Items[i] = "0x" + i.ToString("X8") + "    " + "0x" + mach.GetMemoryAtAddress(i).ToString("X8");
 			}
 
 			tbR0.Text = mach.regs["r0"].ToString();
 			tbR1.Text = mach.regs["r1"].ToString();
 			tbR2.Text = mach.regs["r2"].ToString();
-			tbR3.Text = mach.regs["r2"].ToString();
-			tbR4.Text = mach.regs["r2"].ToString();
-			tbR5.Text = mach.regs["r2"].ToString();
-			tbR6.Text = mach.regs["r2"].ToString();
-			tbR7.Text = mach.regs["r2"].ToString();
+			tbR3.Text = mach.regs["r3"].ToString();
+			tbR4.Text = mach.regs["r4"].ToString();
+			tbR5.Text = mach.regs["r5"].ToString();
+			tbR6.Text = mach.regs["r6"].ToString();
+			tbR7.Text = mach.regs["r7"].ToString();
 
 			tbF0.Text = mach.floats["f0"].ToString();
 			tbF1.Text = mach.floats["f1"].ToString();

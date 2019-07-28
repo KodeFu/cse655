@@ -106,6 +106,9 @@ namespace Simulator
 				case "regi":
 					regi(ref i, ref m);
 					break;
+				case "regf":
+					regf(ref i, ref m);
+					break;
 				case "memr":
 					memr(ref i, ref m);
 					break;
@@ -293,25 +296,31 @@ namespace Simulator
 		}
 		void regr(ref Instruction i, ref Machine m)
 		{
-			string regA = i.field[0];
-			string regB = i.field[1];
+			string a = i.field[0];
+			string b = i.field[1];
 
-			m.regs[regA] = m.regs[regB];
+			m.regs[a] = m.regs[b];
 		}
 		void regi(ref Instruction i, ref Machine m)
 		{
-			string regA = i.field[0];
-			string regB = i.field[1];
+			string a = i.field[0];
+			string b = i.field[1];
 
-			m.regs[regA] = int.Parse(regB);
+			m.regs[a] = int.Parse(b);
 		}
 		void regf(ref Instruction i, ref Machine m)
 		{
-			//m.regs["f0"]
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.floats[a] = float.Parse(b);
 		}
 		void memr(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.regs[a] = m.mem[int.Parse(b)];
 		}
 		void memm(ref Instruction i, ref Machine m)
 		{
@@ -319,7 +328,10 @@ namespace Simulator
 		}
 		void memi(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+			string b = i.field[1];
+			
+			m.mem[m.regs[a]] = int.Parse(b);
 		}
 		void br(ref Instruction i, ref Machine m)
 		{
