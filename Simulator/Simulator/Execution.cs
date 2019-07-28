@@ -324,7 +324,10 @@ namespace Simulator
 		}
 		void memm(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.mem[int.Parse(a)] = m.mem[int.Parse(b)];
 		}
 		void memi(ref Instruction i, ref Machine m)
 		{

@@ -12,6 +12,7 @@
         regi            r3, 5           # put in memory location 5
         memi            r3, 777         # put 777 at memory location 5
         memr            r4, 10          
+        memm            7, 8
         instruction     oper1           # add something
         instruction     oper1, oper2        # load oper1
         instruction     oper1, oper2, oper3 # move something
