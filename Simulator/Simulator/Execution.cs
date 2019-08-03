@@ -8,6 +8,7 @@ namespace Simulator
 {
 	public class Execution
 	{
+		public const int ERROR_CREDIT_OVERFLOW = 1;
 		public void Process(Instruction i, ref Machine m)
 		{
 			// No instruction, return
@@ -185,166 +186,379 @@ namespace Simulator
 			}
 		}
 
+		// RESET
+		// Resets the machine.
+		// 16-bit type
+		// opcode, null, null, null
+		// rst
 		void rst(ref Instruction i, ref Machine m)
 		{
 			m.Initialize();
 		}
 
+		// REBOOT
+		// Reboot the machine.
+		// 16-bit type
+		// opcode, null, null, null
+		// rbt
 		void rbt(ref Instruction i, ref Machine m)
 		{
 			m.Initialize();
 		}
 
+		// HALT
+		// Halts the machine. Only reset or reboot can get out of a halt.
+		// 16-bit type
+		// opcode, null, null, null
+		// halt
 		void halt(ref Instruction i, ref Machine m)
 		{
 			m.halt = 1;
 		}
 
+		// OFF
+		// Turn machine off.
+		// 16-bit type
+		// opcode, null, null, null
+		// off
 		void off(ref Instruction i, ref Machine m)
 		{
 			m.halt = 1;
 		}
 
+		// BEACON COLOR
+		// Set the beacon color.
+		// 16-bit type
+		// opcode, null, null, mode { 0=green, 1=yellow, 2=orange, 3=red}
+		// bccl 1 # yellow
 		void bccl(ref Instruction i, ref Machine m)
 		{
-			m.beaconColor = m.regs["r0"];
-			
+			m.beaconColor = int.Parse(i.field[0]);
+
 			m.ip++;
 		}
 
+		// BEACON TOGGLE
+		// Turn beacon on or off. The beacon is on top of machine as a visual indicator
+		// to indicate various machine states.
+		// 16-bit type
+		// opcode, null, null, mode { 0=off, 1=on }
+		// bctg 1 # beacon on
+		// bctg 0 # beacon off
 		void bctg(ref Instruction i, ref Machine m)
 		{
-			m.beacon = m.regs["r0"];
+			m.beacon = int.Parse(i.field[0]);
 
 			m.ip++;
 		}
 
+		// LOG
+		// Log an error code to the error device. Code gets written to the error
+		// register which gets consumed by the log unit.
+		// 32-bit type
+		// opcode, null, log code
+		// log 782 # log error code 782 to device
 		void log(ref Instruction i, ref Machine m)
 		{
-			m.error = m.regs["r0"];
+			m.error = int.Parse(i.field[0]);
 
 			m.ip++;
 		}
 
+		// DING
+		// Sound the external bell. This can be used to indicate winnings.
+		// 16-bit type
+		// opcode, null, null, mode { 0=off, 1=on/continuous, 2=5 dings, 3=10 dings }
+		// ding 1 # continuous dinging
 		void ding(ref Instruction i, ref Machine m)
 		{
-			m.ding = m.regs["r0"];
+			m.ding = int.Parse(i.field[0]);
 
 			m.ip++;
 		}
 
+		// VOLUME SET
+		// vols(ref i, ref m);
+		// 16-bit type
+		// opcode, null, null, mode { 0=off, 1=soft, 2=midrange, 3=loud}
+		// vols 2 # set to midrange volume
 		void vols(ref Instruction i, ref Machine m)
 		{
-			m.volume = m.regs["r0"];
+			m.volume = int.Parse(i.field[0]);
 
 			m.ip++;
 		}
 
+		// CREDIT ADD
+		// Credits are the generic unit for game play. Credits can be added by hitting 
+		// the button (or pull lever) for 1, 2, or 3 play. Max three credits per play.
+		// 16-bit type
+		// opcode, null, null, mode { 0=NA, 1=one credit, 2=two credit, 3=three credits }
+		// crda 2 # add two credits for play
 		void crda(ref Instruction i, ref Machine m)
 		{
-			m.credits = m.regs["r0"];
+			m.credits = int.Parse(i.field[0]);
 
 			m.ip++;
 		}
 
+		// CREDIT CLEAR
+		// Clears credits. Usually happens after a play.
+		// 16-bit type
+		// opcode, null, null, null
+		// crdc # clear credits stored
 		void crdc(ref Instruction i, ref Machine m)
 		{
-			int amount = m.regs["r0"];
-			m.credits -= amount;
-
-			m.regs["r0"] = m.credits;
-
-			m.ip++;
-		}
-
-		void crdb(ref Instruction i, ref Machine m)
-		{
-			//m.credits = m.regs["r0"];
-
-			m.ip++;
-		}
-
-		void bkpy(ref Instruction i, ref Machine m)
-		{
-			// clear some text
-		}
-
-		void bkbl(ref Instruction i, ref Machine m)
-		{
-			m.regs["r0"] = m.credits;
-
-			m.ip++;
-		}
-
-		void bkad(ref Instruction i, ref Machine m)
-		{
-			// clear some text
-		}
-
-		void bkcl(ref Instruction i, ref Machine m)
-		{
-			// clear some text
-		}
-
-		void jpot(ref Instruction i, ref Machine m)
-		{
-			m.regs["r0"] = m.credits;
-
 			m.credits = 0;
 
 			m.ip++;
 		}
+
+		// CREDIT BALANCE
+		// Gets the credits balance.
+		// 16-bit type
+		// opcode, rX, null, null
+		// crdb r0 # put credit balance into r0
+		void crdb(ref Instruction i, ref Machine m)
+		{
+			m.regs["r0"] = m.credits;
+
+			m.ip++;
+		}
+
+		// BANK PAY
+		// Pay from the bank. If not enough credits, no payout error is set.
+		// 32-bit type
+		// opcode, null, credit amount
+		// bkpy  25  # pay 25 credits from bank
+		void bkpy(ref Instruction i, ref Machine m)
+		{
+			int payAmount = int.Parse(i.field[0]);
+			if (m.credits >= payAmount)
+			{
+				m.bank -= payAmount;
+			}
+			else
+			{
+				m.error = ERROR_CREDIT_OVERFLOW;
+			}
+		}
+
+		// BANK BALANCE
+		// Get bank balance; rX contains bank register balance.
+		// 16-bit type
+		// opcode, rX, null, null
+		// bkbl r0 # put bank balance into r0
+		void bkbl(ref Instruction i, ref Machine m)
+		{
+			m.regs[i.field[0]] = m.bank;
+
+			m.ip++;
+		}
+
+		// BANK ADD
+		// Add credits to bank. Credits are added which is reflected in the	redits register.
+		// But, the bank must be updated too. This instuction adds to the bank.
+		// 16-bit type
+		// opcode, null, null, mode { 0=NA, 1=one credit, 2=two credit, 3=three credits }
+		// bkad 3 # add three credits to the bank
+		void bkad(ref Instruction i, ref Machine m)
+		{
+			m.bank += int.Parse(i.field[0]);
+
+			m.ip++;
+		}
+
+		// BANK CLEAR
+		// All bank credits clear. Usually occurs during after a jackpot or when EOD tally when
+		// all credits withdrawn.
+		// 16-bit type
+		// opcode, null, null, null
+		// bkcl # clear the credits in the bank
+		void bkcl(ref Instruction i, ref Machine m)
+		{
+			m.bank = 0;
+
+			m.ip++;
+		}
+
+		// JACKPOT
+		// Pay full bank on jackpot.
+		// 16-bit type
+		// opcode, null null, null
+		// jpot # pay the full bank amount
+		void jpot(ref Instruction i, ref Machine m)
+		{
+			m.bank = 0;
+
+			m.ip++;
+		}
+
+		// PULL
+		// Pull lever. Can specify credit. The credits can be determined by number of credits 
+		// (1, 2, 3). Only three credits can be played at a time.
+		// 16-bit type
+		// opcode, null, null, mode { 0=NA, 1=one credit, 2=two credit, 3=three credits }
+		// pull 3 # pull lever with three credits
 		void pull(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			m.credits = int.Parse(i.field[0]);
+
+			m.ip++;
 		}
+
+		// BUTTON PLAY
+		// Play credit.
+		// 16-bit type
+		// opcode, null, null, mode { 0=NA, 1=one credit, 2=two credit, 3=three credits }
+		// btnp 3 # push button and play three credits
 		void btnp(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			m.credits = int.Parse(i.field[0]);
+
+			m.ip++;
 		}
 
+		// SPIN
+		// Spin all wheels.
+		// 16-bit type
+		// opcode, rX, null, null
+		//   rX 0=lose; 1=win
+		// spin r0 # spins the wheels; r0 contain results.
 		void spin(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			Random random = new Random();
+			m.regs[i.field[0]] = random.Next(0, 2);
+
+			m.ip++;
 		}
+
+		// START GAMEPLAY
+		// Start a game.This is a special state where inputs including credits, buttons, 
+		// pulls are deactived.Also payout factors are reset.
+		// 16-bit type
+		// opcode, null, null, null
+		// strt # start a gameplay session
 		void strt(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			// Simulation:
+			//   - Dactivate inputs
+			//	 - These would be handled through sytem
+			//     GPIOs (general purpose IO).
+
+			m.ip++;
 		}
+
+		// WAIT FOR ACTIVITY TO COMPLETE
+		// Also, wait for service which means door is open or system is being services.
+		// opcode, null, null, mode { 0=NA, 1=spin, 2=payout, 3=service }
+		// 16-bit type
+		// wait 1 # wait for wheel spin to complete
 		void wait(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			// Simulation:
+			//   - This would wait for an IO activity to complete.
+			//   - Activities:
+			//       SPIN    - spin completion
+			//       PAYOUT  - credit dispense complete
+			//       SERVICE - cabinet service complete
+
+			m.ip++;
 		}
 
+		// END GAMEPLAY
+		// End of a gameplay.Payfactor has been determined and up for grabs.Pay factor
+		// uses a preprogrammed table for winnings.
+		// 16-bit type
+		// opcode, null, null, null
+		// end # end of gameplay
 		void end(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			// Simulation:
+			//   - Reactivate inputs
+			//	 - These would be handled through sytem
+			//     GPIOs (general purpose IO).
+
+			m.ip++;
 		}
 
+		// ABORT GAMEPLAY
+		// Aborts a gameplay
+		// 16-bit type
+		// opcode, null, null, null
+		// abrt # abort gameplay session
 		void abrt(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			// Call end to reactivate system
+			// IP incremented in end, so we don't
+			// do it here.
+			end(ref i, ref m);
 		}
 
+		// WHEEL POS
+		// Get wheel position given the wheel.
+		// 16-bit type
+		// opcode, rX, rY, null
+		//   rX wheel number
+		//   rY wheel position 0..9
+		// whlv r0, r1 # r0 is wheel position; r1 returned pos
 		void whlv(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			// Simulation
+			//   - Return random wheel position
+			Random random = new Random();
+			m.regs[i.field[0]] = random.Next(0, 10);
+
+			m.ip++;
 		}
 
+		// GET PAYOUT FACTOR
+		// This is the factor used for calculating winning.
+		// 16-bit type
+		// opcode, rX, null, null
+		// payf r0 # r0 contains the payout factor.
 		void payf(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			m.regs[i.field[0]] = m.credits;
+
+			m.ip++;
 		}
+
+		// OPEN DRAWR
+		// Open the money drawer; i.e.dispenser.
+		// 16-bit type
+		// opcode, null, null, { 0=NA, 1=OPEN, 2=CLOSE, 3=NA }
+		// drwr 1 # open drawer to dispense
 		void drwr(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			// Simulation:
+			//   - Open credit dispense drawer
+			//	 - These would be handled through sytem
+			//     GPIOs (general purpose IO).
+
+			m.ip++;
 		}
 
+		// DISPENSE
+		// disp
+		// 16-bit type
+		// opcode, r0, null, mode 
+		// disp r0 # r0 contains value to dispense
 		void disp(ref Instruction i, ref Machine m)
 		{
-			// clear some text
+			// Simulation:
+			//   - Dispense money.
+			//	 - These would be handled through sytem
+			//     GPIOs (general purpose IO).
+
+			m.ip++;
 		}
 
+		// REG MOVE REG
+		// Register to register move.rX<- rY
+		// 16-bit type
+		// opcode, rX, rY, na
+		// regr r0, r1 # r0 <- r1
 		void regr(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -354,6 +568,13 @@ namespace Simulator
 
 			m.ip++;
 		}
+
+		// REG MOVE IMMEDIATE
+		// Move immediate into register.If you want to move a 32 bit immediate, use hi/lo
+		// instructions to get value into a register.
+		// 32-bit type
+		// opcode, rX, immediate
+		// movi 12345  # rX <- immediate
 		void regi(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -364,14 +585,41 @@ namespace Simulator
 			m.ip++;
 		}
 
+		// REG MOVE HIGH
+		// high(rX) <- immediate.Immediate should be 16 bits.
+		// 32-bit type
+		// 6 opcode, rX, immediate
+		// regh r0, 1234 # high 16-bits set to 1234
 		void regh(ref Instruction i, ref Machine m)
 		{
+			int immediate = int.Parse(i.field[1]);
+
+			m.regs[i.field[0]] &= (immediate << 16) | 0xffff;
+
+			m.ip++;
 		}
 
+		// REG MOVE LOW
+		// low(rX) <- immediate.Immediate should be 16 bits.
+		// 32-bit type
+		// 6 opcode, rX, immediate
+		// regl r0, 1234 # low 16-bits set to 1234
 		void regl(ref Instruction i, ref Machine m)
 		{
+			int immediate = int.Parse(i.field[1]);
+
+			m.regs[i.field[0]] &= immediate | (0xffff << 16);
+
+			m.ip++;
 		}
 
+		// MEMORY MOVE: MEM TO REG
+		// Memory to register move. rX <- *rY. rY must contain the memory address which
+		// to move from. First put the addres into rY. Then issues the regm instruction
+		// which knows how to access memory.
+		// 16-bit type
+		// opcode, rX, rY, null
+		// regm rX, rY   # move memory pointed to by rY into rX.
 		void memr(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -381,6 +629,14 @@ namespace Simulator
 
 			m.ip++;
 		}
+
+		// MEMORY MOVE: REG TO MEM
+		// 16-bit type
+		// opcode, rX, rY, null
+		// rX contains memory location.rY contains value to move to that location.
+		//   regi rY, 100 # move value into rY
+		//   regi rX, immediate memory address
+		// memm rX, rY   # move value rY into memory location pointed to by rX.
 		void memm(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -391,6 +647,10 @@ namespace Simulator
 			m.ip++;
 		}
 
+		// ADD
+		// 16-bit type
+		// opcode 6, rX, rY, na
+		// rX = rX + rY
 		void addr(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -400,6 +660,11 @@ namespace Simulator
 
 			m.ip++;
 		}
+
+		// SUBTRACT
+		// 16-bit type
+		// opcode, rX, rY, null
+		// rY = rY - rX
 		void subr(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -409,6 +674,11 @@ namespace Simulator
 
 			m.ip++;
 		}
+
+		// MULTIPLY
+		// 16-bit type
+		// opcode, rX, rY, null
+		// rY = rY * rX
 		void mulr(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -418,6 +688,11 @@ namespace Simulator
 
 			m.ip++;
 		}
+
+		// DIVIDE
+		// 16-bit type
+		// opcode, rX, rY, null
+		// rY = rY / rX
 		void divr(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -428,31 +703,73 @@ namespace Simulator
 			m.ip++;
 		}
 
+		// MOD
+		// 16-bit type
+		// opcode, rX, rY, null
+		// rY = rY % rX
 		void modr(ref Instruction i, ref Machine m)
 		{
-			
+			string a = i.field[0];
+			string b = i.field[1];
+
+			m.regs[a] = m.regs[a] % m.regs[b];
+
+			m.ip++;
 		}
 
+		// SHIFT LEFT
+		// 16-bit type
+		// opcode, rX, rY, null
+		// rX = rX << rY
 		void shl(ref Instruction i, ref Machine m)
 		{
+			string a = i.field[0];
+			string b = i.field[1];
 
+			m.regs[a] = m.regs[a] << m.regs[b];
+
+			m.ip++;
 		}
 
+		// SHIFT RIGHT
+		// 16-bit type
+		// opcode, rX, rY, null
+		// rX = rX >> rY
 		void shr(ref Instruction i, ref Machine m)
 		{
+			string a = i.field[0];
+			string b = i.field[1];
 
+			m.regs[a] = m.regs[a] >> m.regs[b];
+
+			m.ip++;
 		}
 
+		// AND
+		// Bitwise And
+		// 16-bit type
+		// opcode, rX, rY, na
+		//   rX = rX & rY
 		void and(ref Instruction i, ref Machine m)
 		{
 
 		}
 
+		// OR
+		// Bitwise Or
+		// 16-bit type
+		// opcode, rX, rY, na
+		// rX = rX | rY
 		void or(ref Instruction i, ref Machine m)
 		{
 
 		}
 
+		// BRANCH
+		// Branch to an address placed into rX
+		// 16-bit type
+		// opcode, rX, na, na
+		// 
 		void br(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -460,11 +777,21 @@ namespace Simulator
 			m.ip = m.labels[a];
 		}
 
+		// BRANCH IMMEDIATE
+		// For a larger address, use br.
+		// 32-bit type
+		// opcode, rX, immediate memory location
+		// 
 		void bri(ref Instruction i, ref Machine m)
 		{
 
 		}
 
+		// BRANCH LESS THAN
+		// Branch to an address placed into rX if less than flag is set.
+		// 16-bit type
+		// opcode 6, rX, na, na
+		// 
 		void bls(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -475,11 +802,22 @@ namespace Simulator
 			}
 		}
 
+		// BRANCH LESS THAN IMMEDIATE
+		// Branch to an address placed into rX if less than flag is set
+		// br(ref i, ref m);
+		// 32-bit type
+		// opcode, rX, immediate memory location
+		// 
 		void blsi(ref Instruction i, ref Machine m)
 		{
-		
+
 		}
 
+		// BRANCH LESS THAN EQUAL
+		// Branch to an address placed into rX if less than flag is set.
+		// 16-bit type
+		// opcode, rX, na, na
+		// 
 		void ble(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -490,11 +828,21 @@ namespace Simulator
 			}
 		}
 
+		// BRANCH LESS THAN EQUAL IMMEDIATE
+		// Branch to an address placed into rX if less than equal flag is set.
+		// 32-bit type
+		// opcode, rX, immediate memory location
+		// 
 		void blei(ref Instruction i, ref Machine m)
 		{
 
 		}
 
+		// BRANCH LESS THAN EQUAL
+		// Branch to an address placed into rX if greater than flag is set.
+		// 16-bit type
+		// opcode, rX, na, na
+		//
 		void bge(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -505,25 +853,24 @@ namespace Simulator
 			}
 		}
 
+		// BRANCH LESS THAN EQUAL IMMEDIATE
+		// Branch to an address placed into rX if greater than equal flag is set.
+		// 32-bit type
+		// 6 opcode, rX, immediate memory location
+		// 
 		void bgei(ref Instruction i, ref Machine m)
 		{
 
 		}
 
-
-		void bgre(ref Instruction i, ref Machine m)
-		{
-			string a = i.field[0];
-
-			if ((m.compare == 0) || (m.compare == 2))
-			{
-				m.ip = m.labels[a];
-			}
-		}
-		void jmp(ref Instruction i, ref Machine m)
-		{
-			// clear some text
-		}
+		// COMPARE
+		// Compare rX and rY.CMPR register.
+		// opcode 6, rX, rY, na
+		//   rX == rY, equal bit; cmpr = 0x1
+		//   rX >  rY, greater than bit set; cmpr = 0x2
+		//   rX<rY, less than bit is set; cmpr = 0x3
+		//   rX >= rY, greater than equal bit is set; cmpr = 0x4
+		//   rX <= rY, less than equal bit is set; cmpr = 0x5
 		void cmp(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -537,6 +884,11 @@ namespace Simulator
 
 			m.ip++;
 		}
+
+		// RANDOM
+		// Random 22 bit number placed in rX.
+		// 16-bit type
+		// opcode 6, rX, na, na
 		void rand(ref Instruction i, ref Machine m)
 		{
 			Random r = new Random();
@@ -546,7 +898,7 @@ namespace Simulator
 
 			m.ip++;
 		}
-		
+
 		int opcode(string i)
 		{
 			int opcode = 0;
@@ -720,97 +1072,3 @@ namespace Simulator
 		}
 	}
 }
-
-/*
-
-Regs
-$log level
-$beac on/off
-$cred num
-halt  0/1
-
-3  loglevel	7 (5=log everything, 3=warn, 1=error)
-2  beacon color green
-1  beacon state off
-32 coin 0
-32 bill 0
-
-
- * 	# Manageability
-	rst					Reset machine, default values
-	rbt					Reboot machine
-	halt				Halt machine - stop it, but don't turn off
-	off					Turn off machine - turn off
-4
-
-	# Beacon
-	bclr	r0			Set bacon color
-	beac	r0			Turn on / off, 0=off, 1=on
-	log		r0			Code
-	loge	r0, r1		Code + value
-
-5
-	
-	# Audio
-	ding	r0			Ding r0 times
-	volm	r0			0-100;
-2
-	
-	# Text Display
-	txt		r0			r0 is address of text
-	clr					clear display
-2
-	
-	# Coin
-	insc	#25			Add coin, 25 cents, example.
-	insb	#1			Add bill, 1 dollar
-	pay		#amount		Pay out amount via dispenser
-	bal		$r0			Get local balance
-	jpot				Dispense all money
-5
-
-	# Handles / Buttons
-	pull				Handle pulled down
-	btnp1	#play		Button pull down, #play1
-	btnp2	#play		Button pull down, #play2
-	btnp3	#play		Button pull down, #play3
-4
-	
-	spin	r0			Spin wheel; r0 has wheel number (0, 1, 2)
-	stop	r0			wheels, r0, r1, r2 contain reel position; r0 has wheel number (0, 1, 2)
-	wait	r0			Wait value, for spin. r0 is wait time seconds
-	wpos	r0, r1		Get wheel position (wheel 1, 2, 3)
-	winf	r0			Put wheel 1, 2, 3 into r0-r2, return winf
-5
-
-	# Payment
-	payf	r0, r1		Calculate payback factor, r0 is plays (1, 2, 3); r1 factor
-	pbck	r0, r1		Calculate payback, r0 is factor, r1 is amount
-2	
-	# Core ASM
-	regr	r0, r0		Move register to register
-	regi	r0, imm		Move immediate to register
-	memr	r0, mem		Move memory to register
-	memm	mem, r0		Move memory to register
-	memi	mem, imm	Move immediate into register
-4	
-	br		label		Branch to label
-	bls		label		Branch less than
-	blse	label		Branch less than equal
-	bgr		label		Branch greater then
-	bgre	label		Brance greater than equal
-	jmp		label		Jump to a label
-	cmp		r0, r1		result go into comp register 0=equal, 1=lt, 2=gt
-7
-
-	rand	r0			get random number
-	addr	r0, r1		r0 + r1 => r0
-	subr	r0, r1		r0 - r1 => r0
-	mulr	r0, r1		r0 * r1 => r0
-	divr	r0, r1		r0 / r1 => r3 quotient = r4 remainder
-	addf	f0, f1		f0 + f1 => f0
-	subf	f0, f1		f0 - f1 => f0
-	divf	r0, r1		f0 / f1 => f0
-	mulf	f0, f1		f0 * f1 => f0
-9
-*/

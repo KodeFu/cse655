@@ -25,11 +25,15 @@ namespace Simulator
 
 	public class Machine
 	{
-		public Dictionary<string, int> regs;		// General registers
+		// ISA Access (used by ISA instructions)
+		public Dictionary<string, int> regs;        // General registers
 		public List<int> mem;                       // Memory
+
+		// Private Register (status; not accessible by ISA instructions)
 		public int ip;                              // Instruction pointer
-		public int compare;
-		public int credits;                         // Machine credits
+		public int compare;	                        // Compare register
+		public int credits;                         // Credits
+		public int bank;							// Bank
 		public int halt;							// Halt status
 		public int beacon;							// Beacon status
 		public int beaconColor;						// Beacon color
