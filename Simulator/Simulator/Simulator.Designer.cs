@@ -38,6 +38,8 @@
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.lExecuteFilename = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -72,22 +74,6 @@
 			this.label31 = new System.Windows.Forms.Label();
 			this.tbIP = new System.Windows.Forms.TextBox();
 			this.label32 = new System.Windows.Forms.Label();
-			this.tbF7 = new System.Windows.Forms.TextBox();
-			this.label15 = new System.Windows.Forms.Label();
-			this.tbF6 = new System.Windows.Forms.TextBox();
-			this.label18 = new System.Windows.Forms.Label();
-			this.tbF1 = new System.Windows.Forms.TextBox();
-			this.label19 = new System.Windows.Forms.Label();
-			this.tbF2 = new System.Windows.Forms.TextBox();
-			this.label20 = new System.Windows.Forms.Label();
-			this.tbF3 = new System.Windows.Forms.TextBox();
-			this.label21 = new System.Windows.Forms.Label();
-			this.tbF4 = new System.Windows.Forms.TextBox();
-			this.label22 = new System.Windows.Forms.Label();
-			this.tbF5 = new System.Windows.Forms.TextBox();
-			this.label23 = new System.Windows.Forms.Label();
-			this.tbF0 = new System.Windows.Forms.TextBox();
-			this.label24 = new System.Windows.Forms.Label();
 			this.tbR7 = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.tbR6 = new System.Windows.Forms.TextBox();
@@ -111,8 +97,6 @@
 			this.lEditFilename = new System.Windows.Forms.Label();
 			this.tbEdit = new System.Windows.Forms.TextBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -204,6 +188,20 @@
 			this.executeToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
 			this.executeToolStripMenuItem.Text = "E&xecute";
 			this.executeToolStripMenuItem.Click += new System.EventHandler(this.executeToolStripMenuItem_Click);
+			// 
+			// stepToolStripMenuItem
+			// 
+			this.stepToolStripMenuItem.Name = "stepToolStripMenuItem";
+			this.stepToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+			this.stepToolStripMenuItem.Text = "&Step";
+			this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
+			// 
+			// resetToolStripMenuItem
+			// 
+			this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
+			this.resetToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+			this.resetToolStripMenuItem.Text = "&Reset";
+			this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
 			// 
 			// lExecuteFilename
 			// 
@@ -364,22 +362,6 @@
 			this.groupBox2.Controls.Add(this.label31);
 			this.groupBox2.Controls.Add(this.tbIP);
 			this.groupBox2.Controls.Add(this.label32);
-			this.groupBox2.Controls.Add(this.tbF7);
-			this.groupBox2.Controls.Add(this.label15);
-			this.groupBox2.Controls.Add(this.tbF6);
-			this.groupBox2.Controls.Add(this.label18);
-			this.groupBox2.Controls.Add(this.tbF1);
-			this.groupBox2.Controls.Add(this.label19);
-			this.groupBox2.Controls.Add(this.tbF2);
-			this.groupBox2.Controls.Add(this.label20);
-			this.groupBox2.Controls.Add(this.tbF3);
-			this.groupBox2.Controls.Add(this.label21);
-			this.groupBox2.Controls.Add(this.tbF4);
-			this.groupBox2.Controls.Add(this.label22);
-			this.groupBox2.Controls.Add(this.tbF5);
-			this.groupBox2.Controls.Add(this.label23);
-			this.groupBox2.Controls.Add(this.tbF0);
-			this.groupBox2.Controls.Add(this.label24);
 			this.groupBox2.Controls.Add(this.tbR7);
 			this.groupBox2.Controls.Add(this.label14);
 			this.groupBox2.Controls.Add(this.tbR6);
@@ -576,150 +558,6 @@
 			this.label32.Size = new System.Drawing.Size(15, 13);
 			this.label32.TabIndex = 40;
 			this.label32.Text = "ip";
-			// 
-			// tbF7
-			// 
-			this.tbF7.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbF7.Location = new System.Drawing.Point(170, 209);
-			this.tbF7.Name = "tbF7";
-			this.tbF7.ReadOnly = true;
-			this.tbF7.Size = new System.Drawing.Size(70, 20);
-			this.tbF7.TabIndex = 39;
-			// 
-			// label15
-			// 
-			this.label15.AutoSize = true;
-			this.label15.Location = new System.Drawing.Point(142, 212);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(16, 13);
-			this.label15.TabIndex = 38;
-			this.label15.Text = "f7";
-			// 
-			// tbF6
-			// 
-			this.tbF6.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbF6.Location = new System.Drawing.Point(170, 183);
-			this.tbF6.Name = "tbF6";
-			this.tbF6.ReadOnly = true;
-			this.tbF6.Size = new System.Drawing.Size(70, 20);
-			this.tbF6.TabIndex = 37;
-			// 
-			// label18
-			// 
-			this.label18.AutoSize = true;
-			this.label18.Location = new System.Drawing.Point(142, 186);
-			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(16, 13);
-			this.label18.TabIndex = 36;
-			this.label18.Text = "f6";
-			// 
-			// tbF1
-			// 
-			this.tbF1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbF1.Location = new System.Drawing.Point(170, 53);
-			this.tbF1.Name = "tbF1";
-			this.tbF1.ReadOnly = true;
-			this.tbF1.Size = new System.Drawing.Size(70, 20);
-			this.tbF1.TabIndex = 35;
-			// 
-			// label19
-			// 
-			this.label19.AutoSize = true;
-			this.label19.Location = new System.Drawing.Point(142, 56);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(16, 13);
-			this.label19.TabIndex = 34;
-			this.label19.Text = "f1";
-			// 
-			// tbF2
-			// 
-			this.tbF2.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbF2.Location = new System.Drawing.Point(170, 79);
-			this.tbF2.Name = "tbF2";
-			this.tbF2.ReadOnly = true;
-			this.tbF2.Size = new System.Drawing.Size(70, 20);
-			this.tbF2.TabIndex = 33;
-			// 
-			// label20
-			// 
-			this.label20.AutoSize = true;
-			this.label20.Location = new System.Drawing.Point(142, 82);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(16, 13);
-			this.label20.TabIndex = 32;
-			this.label20.Text = "f2";
-			// 
-			// tbF3
-			// 
-			this.tbF3.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbF3.Location = new System.Drawing.Point(170, 105);
-			this.tbF3.Name = "tbF3";
-			this.tbF3.ReadOnly = true;
-			this.tbF3.Size = new System.Drawing.Size(70, 20);
-			this.tbF3.TabIndex = 31;
-			// 
-			// label21
-			// 
-			this.label21.AutoSize = true;
-			this.label21.Location = new System.Drawing.Point(142, 108);
-			this.label21.Name = "label21";
-			this.label21.Size = new System.Drawing.Size(16, 13);
-			this.label21.TabIndex = 30;
-			this.label21.Text = "f3";
-			// 
-			// tbF4
-			// 
-			this.tbF4.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbF4.Location = new System.Drawing.Point(170, 131);
-			this.tbF4.Name = "tbF4";
-			this.tbF4.ReadOnly = true;
-			this.tbF4.Size = new System.Drawing.Size(70, 20);
-			this.tbF4.TabIndex = 29;
-			// 
-			// label22
-			// 
-			this.label22.AutoSize = true;
-			this.label22.Location = new System.Drawing.Point(142, 134);
-			this.label22.Name = "label22";
-			this.label22.Size = new System.Drawing.Size(16, 13);
-			this.label22.TabIndex = 28;
-			this.label22.Text = "f4";
-			// 
-			// tbF5
-			// 
-			this.tbF5.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbF5.Location = new System.Drawing.Point(170, 157);
-			this.tbF5.Name = "tbF5";
-			this.tbF5.ReadOnly = true;
-			this.tbF5.Size = new System.Drawing.Size(70, 20);
-			this.tbF5.TabIndex = 27;
-			// 
-			// label23
-			// 
-			this.label23.AutoSize = true;
-			this.label23.Location = new System.Drawing.Point(142, 160);
-			this.label23.Name = "label23";
-			this.label23.Size = new System.Drawing.Size(16, 13);
-			this.label23.TabIndex = 26;
-			this.label23.Text = "f5";
-			// 
-			// tbF0
-			// 
-			this.tbF0.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbF0.Location = new System.Drawing.Point(170, 27);
-			this.tbF0.Name = "tbF0";
-			this.tbF0.ReadOnly = true;
-			this.tbF0.Size = new System.Drawing.Size(70, 20);
-			this.tbF0.TabIndex = 25;
-			// 
-			// label24
-			// 
-			this.label24.AutoSize = true;
-			this.label24.Location = new System.Drawing.Point(142, 30);
-			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(16, 13);
-			this.label24.TabIndex = 24;
-			this.label24.Text = "f0";
 			// 
 			// tbR7
 			// 
@@ -940,20 +778,6 @@
 			this.tabPage2.Text = "Code Execution";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
-			// stepToolStripMenuItem
-			// 
-			this.stepToolStripMenuItem.Name = "stepToolStripMenuItem";
-			this.stepToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.stepToolStripMenuItem.Text = "&Step";
-			this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
-			// 
-			// resetToolStripMenuItem
-			// 
-			this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-			this.resetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.resetToolStripMenuItem.Text = "&Reset";
-			this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
-			// 
 			// Simulator
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1036,22 +860,6 @@
         private System.Windows.Forms.Label lEditFilename;
 		private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem executeToolStripMenuItem;
-		private System.Windows.Forms.TextBox tbF7;
-		private System.Windows.Forms.Label label15;
-		private System.Windows.Forms.TextBox tbF6;
-		private System.Windows.Forms.Label label18;
-		private System.Windows.Forms.TextBox tbF1;
-		private System.Windows.Forms.Label label19;
-		private System.Windows.Forms.TextBox tbF2;
-		private System.Windows.Forms.Label label20;
-		private System.Windows.Forms.TextBox tbF3;
-		private System.Windows.Forms.Label label21;
-		private System.Windows.Forms.TextBox tbF4;
-		private System.Windows.Forms.Label label22;
-		private System.Windows.Forms.TextBox tbF5;
-		private System.Windows.Forms.Label label23;
-		private System.Windows.Forms.TextBox tbF0;
-		private System.Windows.Forms.Label label24;
 		private System.Windows.Forms.TextBox tbVol;
 		private System.Windows.Forms.Label label25;
 		private System.Windows.Forms.TextBox tbDing;

@@ -141,15 +141,6 @@ namespace Simulator
 			tbR6.Text = mach.regs["r6"].ToString();
 			tbR7.Text = mach.regs["r7"].ToString();
 
-			tbF0.Text = mach.floats["f0"].ToString();
-			tbF1.Text = mach.floats["f1"].ToString();
-			tbF2.Text = mach.floats["f2"].ToString();
-			tbF3.Text = mach.floats["f3"].ToString();
-			tbF4.Text = mach.floats["f4"].ToString();
-			tbF5.Text = mach.floats["f5"].ToString();
-			tbF6.Text = mach.floats["f6"].ToString();
-			tbF7.Text = mach.floats["f7"].ToString();
-
 			tbIP.Text = mach.ip.ToString();
 			tbHalt.Text = mach.halt.ToString();
 

@@ -26,7 +26,6 @@ namespace Simulator
 	public class Machine
 	{
 		public Dictionary<string, int> regs;		// General registers
-		public Dictionary<string, float> floats;	// Floating point regs
 		public List<int> mem;                       // Memory
 		public int ip;                              // Instruction pointer
 		public int compare;
@@ -65,17 +64,6 @@ namespace Simulator
 			regs.Add("r5", 0);
 			regs.Add("r6", 0);
 			regs.Add("r7", 0);
-
-			// Floats
-			floats = new Dictionary<string, float>();
-			floats.Add("f0", 0.0f);
-			floats.Add("f1", 0.0f);
-			floats.Add("f2", 0.0f);
-			floats.Add("f3", 0.0f);
-			floats.Add("f4", 0.0f);
-			floats.Add("f5", 0.0f);
-			floats.Add("f6", 0.0f);
-			floats.Add("f7", 0.0f);
 
 			// Memory
 			mem = new List<int>();
