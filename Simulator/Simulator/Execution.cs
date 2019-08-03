@@ -150,29 +150,20 @@ namespace Simulator
 				case "or":
 					or(ref i, ref m);
 					break;
+				case "jmp":
+					jmp(ref i, ref m);
+					break;
 				case "br":
 					br(ref i, ref m);
-					break;
-				case "bri":
-					bri(ref i, ref m);
 					break;
 				case "bls":
 					bls(ref i, ref m);
 					break;
-				case "blsi":
-					blsi(ref i, ref m);
-					break;
 				case "ble":
 					ble(ref i, ref m);
 					break;
-				case "blei":
-					blei(ref i, ref m);
-					break;
 				case "bge":
 					bge(ref i, ref m);
-					break;
-				case "bgei":
-					bgei(ref i, ref m);
 					break;
 				case "cmp":
 					cmp(ref i, ref m);
@@ -752,7 +743,12 @@ namespace Simulator
 		//   rX = rX & rY
 		void and(ref Instruction i, ref Machine m)
 		{
+			string a = i.field[0];
+			string b = i.field[1];
 
+			m.regs[a] = m.regs[a] & m.regs[b];
+
+			m.ip++;
 		}
 
 		// OR
@@ -762,29 +758,37 @@ namespace Simulator
 		// rX = rX | rY
 		void or(ref Instruction i, ref Machine m)
 		{
+			string a = i.field[0];
+			string b = i.field[1];
 
+			m.regs[a] = m.regs[a] | m.regs[b];
+
+			m.ip++;
 		}
 
-		// BRANCH
-		// Branch to an address placed into rX
+		// JUMP
+		// Jump to an address placed into rX
 		// 16-bit type
 		// opcode, rX, na, na
-		// 
-		void br(ref Instruction i, ref Machine m)
+		// jmp rX # jump to address in rX
+		void jmp(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
 
 			m.ip = m.labels[a];
 		}
 
-		// BRANCH IMMEDIATE
-		// For a larger address, use br.
-		// 32-bit type
-		// opcode, rX, immediate memory location
-		// 
-		void bri(ref Instruction i, ref Machine m)
-		{
 
+		// BRANCH
+		// Branch to an address placed into rX
+		// 16-bit type
+		// opcode, rX, na, na
+		// br rX # branch to address in rX
+		void br(ref Instruction i, ref Machine m)
+		{
+			string a = i.field[0];
+
+			m.ip = m.labels[a];
 		}
 
 		// BRANCH LESS THAN
@@ -802,17 +806,6 @@ namespace Simulator
 			}
 		}
 
-		// BRANCH LESS THAN IMMEDIATE
-		// Branch to an address placed into rX if less than flag is set
-		// br(ref i, ref m);
-		// 32-bit type
-		// opcode, rX, immediate memory location
-		// 
-		void blsi(ref Instruction i, ref Machine m)
-		{
-
-		}
-
 		// BRANCH LESS THAN EQUAL
 		// Branch to an address placed into rX if less than flag is set.
 		// 16-bit type
@@ -828,16 +821,6 @@ namespace Simulator
 			}
 		}
 
-		// BRANCH LESS THAN EQUAL IMMEDIATE
-		// Branch to an address placed into rX if less than equal flag is set.
-		// 32-bit type
-		// opcode, rX, immediate memory location
-		// 
-		void blei(ref Instruction i, ref Machine m)
-		{
-
-		}
-
 		// BRANCH LESS THAN EQUAL
 		// Branch to an address placed into rX if greater than flag is set.
 		// 16-bit type
@@ -851,16 +834,6 @@ namespace Simulator
 			{
 				m.ip = m.labels[a];
 			}
-		}
-
-		// BRANCH LESS THAN EQUAL IMMEDIATE
-		// Branch to an address placed into rX if greater than equal flag is set.
-		// 32-bit type
-		// 6 opcode, rX, immediate memory location
-		// 
-		void bgei(ref Instruction i, ref Machine m)
-		{
-
 		}
 
 		// COMPARE
@@ -888,7 +861,7 @@ namespace Simulator
 		// RANDOM
 		// Random 22 bit number placed in rX.
 		// 16-bit type
-		// opcode 6, rX, na, na
+		// opcode, rX, na, na
 		void rand(ref Instruction i, ref Machine m)
 		{
 			Random r = new Random();
@@ -1034,35 +1007,26 @@ namespace Simulator
 				case "or":
 					opcode = 43;
 					break;
-				case "br":
+				case "jmp":
 					opcode = 44;
 					break;
-				case "bri":
+				case "br":
 					opcode = 45;
 					break;
 				case "bl":
 					opcode = 46;
 					break;
-				case "bli":
+				case "ble":
 					opcode = 47;
 					break;
-				case "ble":
+				case "bge":
 					opcode = 48;
 					break;
-				case "blei":
+				case "cmp":
 					opcode = 49;
 					break;
-				case "bge":
-					opcode = 50;
-					break;
-				case "bgei":
-					opcode = 51;
-					break;
-				case "cmp":
-					opcode = 52;
-					break;
 				case "rand":
-					opcode = 53;
+					opcode = 50;
 					break;
 				default:
 					break;
