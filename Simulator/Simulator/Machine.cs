@@ -34,7 +34,7 @@ namespace Simulator
 		public int compare;	                        // Compare register
 		public int credits;                         // Credits
 		public int bank;							// Bank
-		public int halt;							// Halt status
+		public int runstate;						// Run state (0=halt, 1=run, 2=play)
 		public int beacon;							// Beacon status
 		public int beaconColor;						// Beacon color
 		public int error;                           // Error
@@ -78,7 +78,7 @@ namespace Simulator
 			ip = 0;
 			compare = 0;
 			credits = 0;
-			halt = 0;
+			runstate = 0;
 			beacon = 0;
 			beaconColor = 0;
 			error = 0;

@@ -142,7 +142,7 @@ namespace Simulator
 			tbR7.Text = mach.regs["r7"].ToString();
 
 			tbIP.Text = mach.ip.ToString();
-			tbHalt.Text = mach.halt.ToString();
+			tbHalt.Text = mach.runstate.ToString();
 
 		}
 

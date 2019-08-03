@@ -8,7 +8,11 @@
 start:
         regi            r1, 10          # move 10 into r1
         regr            r0, r1          # move r1 into r0
-        regf            f0, 3.14        # move r1 into r0
+        strt
+        ding            5               # ding five times
+        spin            r0
+        wait            1
+        end
 
         regi            r3, 5           # put in memory location 5
         memi            r3, 777         # put 777 at memory location 5

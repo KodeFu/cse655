@@ -204,7 +204,7 @@ namespace Simulator
 		// halt
 		void halt(ref Instruction i, ref Machine m)
 		{
-			m.halt = 1;
+			m.runstate = 1;
 		}
 
 		// OFF
@@ -214,7 +214,7 @@ namespace Simulator
 		// off
 		void off(ref Instruction i, ref Machine m)
 		{
-			m.halt = 1;
+			m.runstate = 1;
 		}
 
 		// BEACON COLOR
@@ -436,6 +436,7 @@ namespace Simulator
 			//   - Dactivate inputs
 			//	 - These would be handled through sytem
 			//     GPIOs (general purpose IO).
+			m.runstate = 2; 
 
 			m.ip++;
 		}
@@ -454,6 +455,9 @@ namespace Simulator
 			//       PAYOUT  - credit dispense complete
 			//       SERVICE - cabinet service complete
 
+			// Simulate IO activity; wait .1 seconds
+			System.Threading.Thread.Sleep(100);
+
 			m.ip++;
 		}
 
@@ -469,6 +473,7 @@ namespace Simulator
 			//   - Reactivate inputs
 			//	 - These would be handled through sytem
 			//     GPIOs (general purpose IO).
+			m.runstate = 0;
 
 			m.ip++;
 		}
