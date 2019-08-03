@@ -180,6 +180,7 @@ namespace Simulator
 					rand(ref i, ref m);
 					break;
 				default:
+					m.ip++;
 					break;
 			}
 		}

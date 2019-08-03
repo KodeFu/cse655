@@ -34,7 +34,6 @@ namespace Simulator
 		public int beacon;							// Beacon status
 		public int beaconColor;						// Beacon color
 		public int error;                           // Error
-		public int errorExt;                        // Error extended
 		public int ding;                            // Ding! Ding!
 		public int volume;                          // Ding volume
 		public string display;                      // Display text
@@ -79,7 +78,6 @@ namespace Simulator
 			beacon = 0;
 			beaconColor = 0;
 			error = 0;
-			errorExt = 0;
 		}
 
 		public int getMaxMem()
