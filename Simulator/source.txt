@@ -6,6 +6,9 @@
 
 #        rst
 start:
+        vols            2
+        bccl            1
+        bctg            1
         regi            r1, 10          # move 10 into r1
         regr            r0, r1          # move r1 into r0
         strt
@@ -18,6 +21,9 @@ start:
         memi            r3, 777         # put 777 at memory location 5
         memr            r4, 10          
         memm            7, 8
+        vols            0
+        bccl            0
+        bctg            0
         br              start
 
 #        instruction     oper1, oper2        # load oper1

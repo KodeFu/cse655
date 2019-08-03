@@ -95,13 +95,6 @@ namespace Simulator
 
 		private void btnStep_Click(object sender, EventArgs e)
 		{
-			/*int currentlySelected = lbExecute.SelectedIndex;
-
-			if (currentlySelected+1<lbExecute.Items.Count)
-			{
-				lbExecute.SelectedIndex = currentlySelected + 1;
-			}*/
-
 			Instruction instruction = new Instruction();
 
 			// Adjust IP
@@ -143,6 +136,11 @@ namespace Simulator
 
 			tbIP.Text = mach.ip.ToString();
 			tbHalt.Text = mach.runstate.ToString();
+			tbErr.Text = mach.error.ToString();
+			tbBeac.Text = mach.beacon.ToString();
+			tbClr.Text = mach.beaconColor.ToString();
+			tbDing.Text = mach.ding.ToString();
+			tbVol.Text = mach.volume.ToString();
 
 		}
 

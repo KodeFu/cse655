@@ -583,9 +583,9 @@
 			this.label27.AutoSize = true;
 			this.label27.Location = new System.Drawing.Point(6, 259);
 			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(24, 13);
+			this.label27.Size = new System.Drawing.Size(22, 13);
 			this.label27.TabIndex = 50;
-			this.label27.Text = "halt";
+			this.label27.Text = "run";
 			// 
 			// tbBeac
 			// 

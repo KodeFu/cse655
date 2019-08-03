@@ -455,8 +455,19 @@ namespace Simulator
 			//       PAYOUT  - credit dispense complete
 			//       SERVICE - cabinet service complete
 
-			// Simulate IO activity; wait .1 seconds
-			System.Threading.Thread.Sleep(100);
+			// Simulate IO activity
+			if (i.field[0] == "1")
+			{
+				System.Threading.Thread.Sleep(100);
+			}
+			else if (i.field[0] == "2")
+			{
+				System.Threading.Thread.Sleep(200);
+			}
+			else if (i.field[0] == "3")
+			{
+				System.Threading.Thread.Sleep(300);
+			}
 
 			m.ip++;
 		}
