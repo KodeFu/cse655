@@ -43,6 +43,7 @@
 			this.lExecuteFilename = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.lbInstructionFormat = new System.Windows.Forms.Label();
 			this.label22 = new System.Windows.Forms.Label();
 			this.tbEncoding = new System.Windows.Forms.TextBox();
 			this.tbOperandThree = new System.Windows.Forms.TextBox();
@@ -110,7 +111,6 @@
 			this.lEditFilename = new System.Windows.Forms.Label();
 			this.tbEdit = new System.Windows.Forms.TextBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.lbInstructionFormat = new System.Windows.Forms.Label();
 			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -267,6 +267,15 @@
 			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Instruction";
+			// 
+			// lbInstructionFormat
+			// 
+			this.lbInstructionFormat.AutoSize = true;
+			this.lbInstructionFormat.Location = new System.Drawing.Point(144, 176);
+			this.lbInstructionFormat.Name = "lbInstructionFormat";
+			this.lbInstructionFormat.Size = new System.Drawing.Size(0, 13);
+			this.lbInstructionFormat.TabIndex = 26;
+			this.lbInstructionFormat.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label22
 			// 
@@ -923,15 +932,6 @@
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Code Execution";
 			this.tabPage2.UseVisualStyleBackColor = true;
-			// 
-			// lbInstructionFormat
-			// 
-			this.lbInstructionFormat.AutoSize = true;
-			this.lbInstructionFormat.Location = new System.Drawing.Point(209, 176);
-			this.lbInstructionFormat.Name = "lbInstructionFormat";
-			this.lbInstructionFormat.Size = new System.Drawing.Size(0, 13);
-			this.lbInstructionFormat.TabIndex = 26;
-			this.lbInstructionFormat.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// Simulator
 			// 

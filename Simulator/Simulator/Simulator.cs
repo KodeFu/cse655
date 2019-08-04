@@ -156,7 +156,7 @@ namespace Simulator
 			if (opcode.Equals("0")) return;
 			tbOpcode.Text = opcode +
 					" (" +
-					Convert.ToString(int.Parse(opcode), 2).PadLeft(2, '0')
+					Convert.ToString(int.Parse(opcode), 2)
 					+ ")";
 
 			// Update operands
@@ -165,7 +165,7 @@ namespace Simulator
 				// Branch instruction, resolve label
 				tbOperandOne.Text = mach.labels[instruction.field[0]].ToString() + 
 					" (" +
-					Convert.ToString(mach.labels[instruction.field[0]], 2).PadLeft(2, '0') 
+					Convert.ToString(mach.labels[instruction.field[0]], 2)
 					+ ")";
 			}
 			else
@@ -175,27 +175,29 @@ namespace Simulator
 				{
 					tbOperandOne.Text = exec.GetRegisterEncoding(instruction.field[0]).ToString() +
 						" (" +
-						Convert.ToString(int.Parse(exec.GetRegisterEncoding(instruction.field[0])), 2).PadLeft(2, '0')
+						Convert.ToString(int.Parse(exec.GetRegisterEncoding(instruction.field[0])), 2)
 						+ ")";
 				}
 				if (instruction.field.Count >= 2)
 				{
 					tbOperandTwo.Text = exec.GetRegisterEncoding(instruction.field[1]).ToString() +
 						" (" +
-						Convert.ToString(int.Parse(exec.GetRegisterEncoding(instruction.field[1])), 2).PadLeft(2, '0')
+						Convert.ToString(int.Parse(exec.GetRegisterEncoding(instruction.field[1])), 2)
 						+ ")";
 				}
 				if (instruction.field.Count >= 3)
 				{
 					tbOperandThree.Text = exec.GetRegisterEncoding(instruction.field[2]).ToString() +
 						" (" +
-						Convert.ToString(int.Parse(exec.GetRegisterEncoding(instruction.field[2])), 2).PadLeft(2, '0')
+						Convert.ToString(int.Parse(exec.GetRegisterEncoding(instruction.field[2])), 2)
 						+ ")";
 				}
 			}
 
 			// Update final encoding
-			lbInstructionFormat.Text = exec.Is32BitType(instruction.instruction) ? "Type: 32-bit" : "Type: 16-bit";
+			lbInstructionFormat.Text = exec.Is32BitType(instruction.instruction) ? 
+				"Type: 32-bit [ opcode:6 | reg:4 | value:22 ]" :
+				"Type: 16-bit [ opcode:6 | reg:4 | reg:4 | mode:2 ]";
 			tbEncoding.Text = exec.EncodeInstruction(instruction, mach);
 		}
 
