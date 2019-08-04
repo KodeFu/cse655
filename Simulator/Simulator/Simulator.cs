@@ -148,11 +148,54 @@ namespace Simulator
 			tbOperandOne.Text = String.Empty;
 			tbOperandTwo.Text = String.Empty;
 			tbOperandThree.Text = String.Empty;
-			tbOpcode.Text = exec.GetOpcode(instruction.instruction).ToString();
-			if (instruction.field.Count >= 1) tbOperandOne.Text = exec.GetRegisterEncoding(instruction.field[0]).ToString();
-			if (instruction.field.Count >= 2) tbOperandTwo.Text = exec.GetRegisterEncoding(instruction.field[1]).ToString();
-			if (instruction.field.Count >= 3) tbOperandThree.Text = exec.GetRegisterEncoding(instruction.field[2]).ToString();
+			tbEncoding.Text = String.Empty;
+			lbInstructionFormat.Text = String.Empty;
 
+			// Update opcode
+			string opcode = exec.GetOpcode(instruction.instruction).ToString();
+			if (opcode.Equals("0")) return;
+			tbOpcode.Text = opcode +
+					" (" +
+					Convert.ToString(int.Parse(opcode), 2).PadLeft(2, '0')
+					+ ")";
+
+			// Update operands
+			if (instruction.field.Count>0 && mach.labels.ContainsKey(instruction.field[0]))
+			{
+				// Branch instruction, resolve label
+				tbOperandOne.Text = mach.labels[instruction.field[0]].ToString() + 
+					" (" +
+					Convert.ToString(mach.labels[instruction.field[0]], 2).PadLeft(2, '0') 
+					+ ")";
+			}
+			else
+			{
+				// Non-branch instructions
+				if (instruction.field.Count >= 1)
+				{
+					tbOperandOne.Text = exec.GetRegisterEncoding(instruction.field[0]).ToString() +
+						" (" +
+						Convert.ToString(int.Parse(exec.GetRegisterEncoding(instruction.field[0])), 2).PadLeft(2, '0')
+						+ ")";
+				}
+				if (instruction.field.Count >= 2)
+				{
+					tbOperandTwo.Text = exec.GetRegisterEncoding(instruction.field[1]).ToString() +
+						" (" +
+						Convert.ToString(int.Parse(exec.GetRegisterEncoding(instruction.field[1])), 2).PadLeft(2, '0')
+						+ ")";
+				}
+				if (instruction.field.Count >= 3)
+				{
+					tbOperandThree.Text = exec.GetRegisterEncoding(instruction.field[2]).ToString() +
+						" (" +
+						Convert.ToString(int.Parse(exec.GetRegisterEncoding(instruction.field[2])), 2).PadLeft(2, '0')
+						+ ")";
+				}
+			}
+
+			// Update final encoding
+			lbInstructionFormat.Text = exec.Is32BitType(instruction.instruction) ? "Type: 32-bit" : "Type: 16-bit";
 			tbEncoding.Text = exec.EncodeInstruction(instruction, mach);
 		}
 

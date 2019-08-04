@@ -110,6 +110,7 @@
 			this.lEditFilename = new System.Windows.Forms.Label();
 			this.tbEdit = new System.Windows.Forms.TextBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.lbInstructionFormat = new System.Windows.Forms.Label();
 			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -236,6 +237,7 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.lbInstructionFormat);
 			this.groupBox1.Controls.Add(this.label22);
 			this.groupBox1.Controls.Add(this.tbEncoding);
 			this.groupBox1.Controls.Add(this.tbOperandThree);
@@ -264,7 +266,7 @@
 			this.groupBox1.Size = new System.Drawing.Size(389, 225);
 			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Description";
+			this.groupBox1.Text = "Instruction";
 			// 
 			// label22
 			// 
@@ -287,16 +289,16 @@
 			// tbOperandThree
 			// 
 			this.tbOperandThree.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbOperandThree.Location = new System.Drawing.Point(234, 147);
+			this.tbOperandThree.Location = new System.Drawing.Point(297, 147);
 			this.tbOperandThree.Name = "tbOperandThree";
 			this.tbOperandThree.ReadOnly = true;
-			this.tbOperandThree.Size = new System.Drawing.Size(70, 20);
+			this.tbOperandThree.Size = new System.Drawing.Size(83, 20);
 			this.tbOperandThree.TabIndex = 23;
 			// 
 			// label21
 			// 
 			this.label21.AutoSize = true;
-			this.label21.Location = new System.Drawing.Point(234, 129);
+			this.label21.Location = new System.Drawing.Point(288, 129);
 			this.label21.Name = "label21";
 			this.label21.Size = new System.Drawing.Size(48, 13);
 			this.label21.TabIndex = 22;
@@ -305,16 +307,16 @@
 			// tbOperandTwo
 			// 
 			this.tbOperandTwo.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbOperandTwo.Location = new System.Drawing.Point(158, 147);
+			this.tbOperandTwo.Location = new System.Drawing.Point(199, 147);
 			this.tbOperandTwo.Name = "tbOperandTwo";
 			this.tbOperandTwo.ReadOnly = true;
-			this.tbOperandTwo.Size = new System.Drawing.Size(70, 20);
+			this.tbOperandTwo.Size = new System.Drawing.Size(90, 20);
 			this.tbOperandTwo.TabIndex = 21;
 			// 
 			// label20
 			// 
 			this.label20.AutoSize = true;
-			this.label20.Location = new System.Drawing.Point(158, 129);
+			this.label20.Location = new System.Drawing.Point(196, 129);
 			this.label20.Name = "label20";
 			this.label20.Size = new System.Drawing.Size(48, 13);
 			this.label20.TabIndex = 20;
@@ -323,16 +325,16 @@
 			// tbOperandOne
 			// 
 			this.tbOperandOne.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbOperandOne.Location = new System.Drawing.Point(82, 147);
+			this.tbOperandOne.Location = new System.Drawing.Point(103, 147);
 			this.tbOperandOne.Name = "tbOperandOne";
 			this.tbOperandOne.ReadOnly = true;
-			this.tbOperandOne.Size = new System.Drawing.Size(70, 20);
+			this.tbOperandOne.Size = new System.Drawing.Size(90, 20);
 			this.tbOperandOne.TabIndex = 19;
 			// 
 			// label19
 			// 
 			this.label19.AutoSize = true;
-			this.label19.Location = new System.Drawing.Point(82, 129);
+			this.label19.Location = new System.Drawing.Point(100, 131);
 			this.label19.Name = "label19";
 			this.label19.Size = new System.Drawing.Size(48, 13);
 			this.label19.TabIndex = 18;
@@ -344,7 +346,7 @@
 			this.tbOpcode.Location = new System.Drawing.Point(6, 147);
 			this.tbOpcode.Name = "tbOpcode";
 			this.tbOpcode.ReadOnly = true;
-			this.tbOpcode.Size = new System.Drawing.Size(70, 20);
+			this.tbOpcode.Size = new System.Drawing.Size(91, 20);
 			this.tbOpcode.TabIndex = 17;
 			// 
 			// label18
@@ -391,16 +393,16 @@
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(56, 13);
 			this.label5.TabIndex = 12;
-			this.label5.Text = "Instruction";
+			this.label5.Text = "Mnemonic";
 			// 
 			// label4
 			// 
 			this.label4.AutoSize = true;
 			this.label4.Location = new System.Drawing.Point(307, 18);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(34, 13);
+			this.label4.Size = new System.Drawing.Size(29, 13);
 			this.label4.TabIndex = 11;
-			this.label4.Text = "Mode";
+			this.label4.Text = "Field";
 			// 
 			// label3
 			// 
@@ -922,6 +924,15 @@
 			this.tabPage2.Text = "Code Execution";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
+			// lbInstructionFormat
+			// 
+			this.lbInstructionFormat.AutoSize = true;
+			this.lbInstructionFormat.Location = new System.Drawing.Point(209, 176);
+			this.lbInstructionFormat.Name = "lbInstructionFormat";
+			this.lbInstructionFormat.Size = new System.Drawing.Size(0, 13);
+			this.lbInstructionFormat.TabIndex = 26;
+			this.lbInstructionFormat.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// Simulator
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1036,6 +1047,7 @@
 		private System.Windows.Forms.Label label23;
 		private System.Windows.Forms.TextBox tbCmp;
 		private System.Windows.Forms.Label label31;
+		private System.Windows.Forms.Label lbInstructionFormat;
 	}
 }
 
