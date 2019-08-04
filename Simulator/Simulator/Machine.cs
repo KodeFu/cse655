@@ -55,6 +55,7 @@ namespace Simulator
 
 		public void Initialize()
 		{
+			//maxMem = 0x3fffff / sizeof(int) ; // 2 ^ 22
 			maxMem = 1024;
 
 			// General Registers
@@ -72,7 +73,7 @@ namespace Simulator
 			mem = new List<int>();
 			for (int i = 0; i < maxMem; i++)
 			{
-				mem.Add(i*2); // putting some default value in there
+				mem.Add(0);
 			}
 
 			ip = 0;

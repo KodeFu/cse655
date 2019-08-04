@@ -436,7 +436,7 @@ namespace Simulator
 			//   - Dactivate inputs
 			//	 - These would be handled through sytem
 			//     GPIOs (general purpose IO).
-			m.runstate = 2; 
+			m.runstate = 2;
 
 			m.ip++;
 		}
@@ -632,7 +632,7 @@ namespace Simulator
 			string a = i.field[0];
 			string b = i.field[1];
 
-			m.regs[a] = m.mem[int.Parse(b)];
+			m.regs[a] = m.mem[m.regs[b]];
 
 			m.ip++;
 		}
@@ -640,7 +640,7 @@ namespace Simulator
 		// MEMORY MOVE: REG TO MEM
 		// 16-bit type
 		// opcode, rX, rY, null
-		// rX contains memory location.rY contains value to move to that location.
+		// rX contains memory location. rY contains value to move to that location.
 		//   regi rY, 100 # move value into rY
 		//   regi rX, immediate memory address
 		// memm rX, rY   # move value rY into memory location pointed to by rX.
@@ -649,7 +649,7 @@ namespace Simulator
 			string a = i.field[0];
 			string b = i.field[1];
 
-			m.mem[int.Parse(a)] = m.mem[int.Parse(b)];
+			m.mem[m.regs[a]] = m.regs[b];
 
 			m.ip++;
 		}
@@ -784,9 +784,9 @@ namespace Simulator
 
 		// JUMP
 		// Jump to an address placed into rX
-		// 16-bit type
-		// opcode, rX, na, na
-		// jmp rX # jump to address in rX
+		// 32-bit type
+		// opcode, na, location
+		// jmp location # jump to address
 		void jmp(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -797,9 +797,9 @@ namespace Simulator
 
 		// BRANCH
 		// Branch to an address placed into rX
-		// 16-bit type
-		// opcode, rX, na, na
-		// br rX # branch to address in rX
+		// 32-bit type
+		// opcode, na, location
+		// br location # branch to address
 		void br(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -809,9 +809,9 @@ namespace Simulator
 
 		// BRANCH LESS THAN
 		// Branch to an address placed into rX if less than flag is set.
-		// 16-bit type
-		// opcode 6, rX, na, na
-		// 
+		// 32-bit type
+		// opcode, na, location
+		// br location # branch to address
 		void bls(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -824,9 +824,9 @@ namespace Simulator
 
 		// BRANCH LESS THAN EQUAL
 		// Branch to an address placed into rX if less than flag is set.
-		// 16-bit type
-		// opcode, rX, na, na
-		// 
+		// 32-bit type
+		// opcode, na, location
+		// br location # branch to address
 		void ble(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -839,9 +839,9 @@ namespace Simulator
 
 		// BRANCH LESS THAN EQUAL
 		// Branch to an address placed into rX if greater than flag is set.
-		// 16-bit type
-		// opcode, rX, na, na
-		//
+		// 32-bit type
+		// opcode, na, location
+		// br location # branch to address
 		void bge(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
@@ -888,7 +888,7 @@ namespace Simulator
 			m.ip++;
 		}
 
-		int opcode(string i)
+		public int GetOpcode(string i)
 		{
 			int opcode = 0;
 
@@ -1049,6 +1049,234 @@ namespace Simulator
 			}
 
 			return opcode;
+		}
+		public string GetRegisterEncoding(string i)
+		{
+			string reg = String.Empty;
+
+			switch (i)
+			{
+				case "r0":
+					reg = "0";
+					break;
+				case "r1":
+					reg = "1";
+					break;
+				case "r2":
+					reg = "2";
+					break;
+				case "r3":
+					reg = "3";
+					break;
+				case "r4":
+					reg = "4";
+					break;
+				case "r5":
+					reg = "5";
+					break;
+				case "r6":
+					reg = "6";
+					break;
+				case "r7":
+					reg = "7";
+					break;
+				default:
+					reg = i;
+					break;
+			}
+
+			return reg;
+		}
+
+		public bool Is32BitType(string i)
+		{
+			bool ret = false;
+
+			switch (i)
+			{
+				case "rst":
+				case "rbt":
+				case "halt":
+				case "off":
+				case "bccl":
+				case "bctg":
+				case "ding":
+				case "vols":
+				case "crda":
+				case "crdc":
+				case "crdb":
+				case "bkbl":
+				case "bkad":
+				case "bkcl":
+				case "jpot":
+				case "pull":
+				case "btpl":
+				case "spin":
+				case "strt":
+				case "wait":
+				case "end":
+				case "abrt":
+				case "whlv":
+				case "payf":
+				case "drwr":
+				case "disp":
+				case "regr":
+				case "memr":
+				case "memm":
+				case "addr":
+				case "subr":
+				case "mulr":
+				case "divr":
+				case "modr":
+				case "shl":
+				case "shr":
+				case "and":
+				case "or":
+				case "cmp":
+				case "rand":
+					ret = false;
+					break;
+				case "log":
+				case "bkpy":
+				case "regi":
+				case "regh":
+				case "regl":
+				case "jmp":
+				case "br":
+				case "bl":
+				case "ble":
+				case "bge":
+					ret = true;
+					break;
+				default:
+					break;
+			}
+
+			return ret;
+		}
+
+		public string EncodeInstruction(Instruction i, Machine m)
+		{
+			string encOpcode6 = String.Empty;
+			string encOperandOne = String.Empty;
+			string encOperandTwo = String.Empty;
+			string encOperandThree = String.Empty;
+
+			string empty2 = "00";
+			string empty4 = "0000";
+			string empty22 = "0000000000000000000000";
+
+			string ret = String.Empty;
+
+			encOpcode6 = Convert.ToString(GetOpcode(i.instruction), 2).PadLeft(6, '0');
+
+			switch (i.instruction)
+			{
+				case "rst":
+				case "rbt":
+				case "halt":
+				case "off":
+				case "crdc":
+				case "bkcl":
+				case "jpot":
+				case "strt":
+				case "end":
+				case "abrt":           // 16-bit
+					ret = encOpcode6 + // opcode
+						empty4 +       // register
+						empty4 +       // register
+						empty2;        // mode
+					break;
+
+				case "log":                                                          // 32-bit
+					ret = encOpcode6 +                                               // opcode
+						Convert.ToString(int.Parse(GetRegisterEncoding(i.field[0])), 2).PadLeft(4, '0') + // register
+						Convert.ToString(int.Parse(i.field[1]), 2).PadLeft(22, '0'); // value
+					break;
+
+				case "bccl":
+				case "bctg":
+				case "ding":
+				case "vols":
+				case "crda":
+				case "drwr":
+				case "wait":
+				case "bkad":
+				case "pull":
+				case "btpl":                                                         // 16-bit
+					ret = encOpcode6 +                                               // opcode
+						empty4 +                                                     // register
+						empty4 +                                                     // register
+						Convert.ToString(int.Parse(i.field[0]), 2).PadLeft(2, '0');  // mode
+					break;
+
+				case "bkpy":                                                         // 32-bit
+					ret = encOpcode6 +                                               // opcode
+						empty4 +                                                     // register
+						Convert.ToString(int.Parse(i.field[0]), 2).PadLeft(22, '0'); // value
+					break;
+				case "crdb":
+				case "bkbl":
+				case "spin":
+				case "whlv":
+				case "payf":
+				case "disp":
+				case "rand":                                                         // 16-bit
+					ret = encOpcode6 +                                               // opcode
+						Convert.ToString(int.Parse(GetRegisterEncoding(i.field[0])), 2).PadLeft(4, '0') + // register
+						empty4 +                                                     // register
+						empty2;                                                      // mode
+					break;
+
+				case "regi":
+				case "regh":
+				case "regl":                                                                               // 32-bit
+					ret = encOpcode6 +                                                                     // opcode
+						Convert.ToString(int.Parse(GetRegisterEncoding(i.field[0])), 2).PadLeft(4, '0') +  // register
+						Convert.ToString(int.Parse(i.field[1]), 2).PadLeft(22, '0');  // value
+					break;
+
+				case "regr":
+				case "memr":
+				case "memm":
+				case "addr":
+				case "subr":
+				case "mulr":
+				case "divr":
+				case "modr":
+				case "shl":
+				case "shr":
+				case "and":
+				case "or":                                                                                 // 16-bit
+					ret = encOpcode6 +                                                                     // opcode
+						Convert.ToString(int.Parse(GetRegisterEncoding(i.field[0])), 2).PadLeft(4, '0') +  // register
+						Convert.ToString(int.Parse(GetRegisterEncoding(i.field[1])), 2).PadLeft(4, '0') +  // register
+						empty2;                                                                            // mode
+					break;
+
+				case "jmp":
+				case "br":
+				case "bl":
+				case "ble":
+				case "bge":                                                             // 32-bit
+					string jumpLocation = m.labels[i.field[0]].ToString();
+					ret = encOpcode6 +                                                  // opcode
+						empty4 +                                                        // register
+						Convert.ToString(int.Parse(jumpLocation), 2).PadLeft(22, '0');  // value
+					break;
+
+				case "cmp":                                                            // 16-bit
+					ret = encOpcode6 +                                                 // opcode
+						Convert.ToString(int.Parse(GetRegisterEncoding(i.field[0])), 2).PadLeft(4, '0') +   // register
+						Convert.ToString(int.Parse(GetRegisterEncoding(i.field[1])), 2).PadLeft(4, '0') +   // register
+						empty2;                                                        // mode
+					break;
+
+				default:
+					break;
+			}
+
+			return ret;
 		}
 	}
 }

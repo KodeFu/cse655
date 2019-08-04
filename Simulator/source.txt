@@ -17,10 +17,14 @@ start:
         wait            1
         end
 
-        regi            r3, 5           # put in memory location 5
-        memi            r3, 777         # put 777 at memory location 5
-        memr            r4, 10          
-        memm            7, 8
+        regi            r0, 10
+        regi            r1, 10
+        cmp             r0, r1          # compare if equal
+
+        regi            r5, 777         # r5 = 777
+        regi            r4, 4           # r4 =  memory location 4
+        memm            r4, r5          # *r4 = 777; mem[4] = 777
+
         vols            0
         bccl            0
         bctg            0

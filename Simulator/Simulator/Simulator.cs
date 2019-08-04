@@ -141,7 +141,19 @@ namespace Simulator
 			tbClr.Text = mach.beaconColor.ToString();
 			tbDing.Text = mach.ding.ToString();
 			tbVol.Text = mach.volume.ToString();
+			tbCmp.Text = mach.compare.ToString();
 
+			// Update encoding
+			tbOpcode.Text = String.Empty;
+			tbOperandOne.Text = String.Empty;
+			tbOperandTwo.Text = String.Empty;
+			tbOperandThree.Text = String.Empty;
+			tbOpcode.Text = exec.GetOpcode(instruction.instruction).ToString();
+			if (instruction.field.Count >= 1) tbOperandOne.Text = exec.GetRegisterEncoding(instruction.field[0]).ToString();
+			if (instruction.field.Count >= 2) tbOperandTwo.Text = exec.GetRegisterEncoding(instruction.field[1]).ToString();
+			if (instruction.field.Count >= 3) tbOperandThree.Text = exec.GetRegisterEncoding(instruction.field[2]).ToString();
+
+			tbEncoding.Text = exec.EncodeInstruction(instruction, mach);
 		}
 
 		private void btnReset_Click(object sender, EventArgs e)
@@ -173,5 +185,6 @@ namespace Simulator
 		{
 			btnReset_Click(null, null);
 		}
+
 	}
 }
