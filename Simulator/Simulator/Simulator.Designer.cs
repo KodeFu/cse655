@@ -111,6 +111,8 @@
 			this.lEditFilename = new System.Windows.Forms.Label();
 			this.tbEdit = new System.Windows.Forms.TextBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.tbCredits = new System.Windows.Forms.TextBox();
+			this.label33 = new System.Windows.Forms.Label();
 			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -478,6 +480,8 @@
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.tbCredits);
+			this.groupBox2.Controls.Add(this.label33);
 			this.groupBox2.Controls.Add(this.tbCmp);
 			this.groupBox2.Controls.Add(this.label31);
 			this.groupBox2.Controls.Add(this.label24);
@@ -573,7 +577,7 @@
 			// tbVol
 			// 
 			this.tbVol.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbVol.Location = new System.Drawing.Point(161, 40);
+			this.tbVol.Location = new System.Drawing.Point(177, 40);
 			this.tbVol.Name = "tbVol";
 			this.tbVol.ReadOnly = true;
 			this.tbVol.Size = new System.Drawing.Size(70, 20);
@@ -600,7 +604,7 @@
 			// label25
 			// 
 			this.label25.AutoSize = true;
-			this.label25.Location = new System.Drawing.Point(130, 39);
+			this.label25.Location = new System.Drawing.Point(146, 39);
 			this.label25.Name = "label25";
 			this.label25.Size = new System.Drawing.Size(21, 13);
 			this.label25.TabIndex = 54;
@@ -609,7 +613,7 @@
 			// tbDing
 			// 
 			this.tbDing.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbDing.Location = new System.Drawing.Point(161, 118);
+			this.tbDing.Location = new System.Drawing.Point(177, 118);
 			this.tbDing.Name = "tbDing";
 			this.tbDing.ReadOnly = true;
 			this.tbDing.Size = new System.Drawing.Size(70, 20);
@@ -618,7 +622,7 @@
 			// label26
 			// 
 			this.label26.AutoSize = true;
-			this.label26.Location = new System.Drawing.Point(124, 118);
+			this.label26.Location = new System.Drawing.Point(140, 118);
 			this.label26.Name = "label26";
 			this.label26.Size = new System.Drawing.Size(27, 13);
 			this.label26.TabIndex = 52;
@@ -645,7 +649,7 @@
 			// tbBeac
 			// 
 			this.tbBeac.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbBeac.Location = new System.Drawing.Point(161, 66);
+			this.tbBeac.Location = new System.Drawing.Point(177, 66);
 			this.tbBeac.Name = "tbBeac";
 			this.tbBeac.ReadOnly = true;
 			this.tbBeac.Size = new System.Drawing.Size(70, 20);
@@ -654,7 +658,7 @@
 			// label28
 			// 
 			this.label28.AutoSize = true;
-			this.label28.Location = new System.Drawing.Point(120, 65);
+			this.label28.Location = new System.Drawing.Point(136, 65);
 			this.label28.Name = "label28";
 			this.label28.Size = new System.Drawing.Size(31, 13);
 			this.label28.TabIndex = 48;
@@ -663,7 +667,7 @@
 			// tbClr
 			// 
 			this.tbClr.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbClr.Location = new System.Drawing.Point(161, 92);
+			this.tbClr.Location = new System.Drawing.Point(177, 92);
 			this.tbClr.Name = "tbClr";
 			this.tbClr.ReadOnly = true;
 			this.tbClr.Size = new System.Drawing.Size(70, 20);
@@ -672,7 +676,7 @@
 			// label29
 			// 
 			this.label29.AutoSize = true;
-			this.label29.Location = new System.Drawing.Point(127, 95);
+			this.label29.Location = new System.Drawing.Point(143, 95);
 			this.label29.Name = "label29";
 			this.label29.Size = new System.Drawing.Size(24, 13);
 			this.label29.TabIndex = 46;
@@ -860,9 +864,9 @@
 			// 
 			// btnReset
 			// 
-			this.btnReset.Location = new System.Drawing.Point(302, 69);
+			this.btnReset.Location = new System.Drawing.Point(307, 121);
 			this.btnReset.Name = "btnReset";
-			this.btnReset.Size = new System.Drawing.Size(75, 39);
+			this.btnReset.Size = new System.Drawing.Size(70, 24);
 			this.btnReset.TabIndex = 2;
 			this.btnReset.Text = "Reset";
 			this.btnReset.UseVisualStyleBackColor = true;
@@ -870,9 +874,9 @@
 			// 
 			// btnStep
 			// 
-			this.btnStep.Location = new System.Drawing.Point(302, 19);
+			this.btnStep.Location = new System.Drawing.Point(307, 87);
 			this.btnStep.Name = "btnStep";
-			this.btnStep.Size = new System.Drawing.Size(75, 41);
+			this.btnStep.Size = new System.Drawing.Size(70, 25);
 			this.btnStep.TabIndex = 1;
 			this.btnStep.Text = "Step";
 			this.btnStep.UseVisualStyleBackColor = true;
@@ -932,6 +936,24 @@
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Code Execution";
 			this.tabPage2.UseVisualStyleBackColor = true;
+			// 
+			// tbCredits
+			// 
+			this.tbCredits.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbCredits.Location = new System.Drawing.Point(307, 40);
+			this.tbCredits.Name = "tbCredits";
+			this.tbCredits.ReadOnly = true;
+			this.tbCredits.Size = new System.Drawing.Size(70, 20);
+			this.tbCredits.TabIndex = 61;
+			// 
+			// label33
+			// 
+			this.label33.AutoSize = true;
+			this.label33.Location = new System.Drawing.Point(264, 43);
+			this.label33.Name = "label33";
+			this.label33.Size = new System.Drawing.Size(38, 13);
+			this.label33.TabIndex = 60;
+			this.label33.Text = "credits";
 			// 
 			// Simulator
 			// 
@@ -1048,6 +1070,8 @@
 		private System.Windows.Forms.TextBox tbCmp;
 		private System.Windows.Forms.Label label31;
 		private System.Windows.Forms.Label lbInstructionFormat;
+		private System.Windows.Forms.TextBox tbCredits;
+		private System.Windows.Forms.Label label33;
 	}
 }
 

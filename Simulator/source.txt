@@ -6,34 +6,27 @@
 
 #        rst
 start:
-        vols            2
-        bccl            1
-        bctg            1
-        regi            r1, 10          # move 10 into r1
-        regr            r0, r1          # move r1 into r0
-        strt
+        vols            2               # set volume to midrange
+        bccl            1               # set beacon color
+        bctg            1               # turn on the beacon
+        regi            r1, 10          # move 10 into r1; r1=10
+        regr            r0, r1          # move r1 into r0; r0=10
+        strt                            # start a gameplay session
         ding            5               # ding five times
-        spin            r0
-        wait            1
-        end
+        spin            r5              # spin the wheels; r5=win/loss
+        wait            1               # wait for spin to complete
+        end                             # end gameplay session
 
-        regi            r0, 10
-        regi            r1, 10
-        cmp             r0, r1          # compare if equal
+        regi            r0, 25          # move r0=25
+        regi            r1, 25          # move r1=25
+        cmp             r0, r1          # compare if equal; cmp=1
 
-        regi            r5, 777         # r5 = 777
+        regi            r5, 777         # move r5 = 777
         regi            r4, 4           # r4 =  memory location 4
-        memm            r4, r5          # *r4 = 777; mem[4] = 777
+        memm            r4, r5          # *r4 = 777; mem[4] = 777 (0x309)
 
-        vols            0
-        bccl            0
-        bctg            0
-        br              start
+        vols            0               # set volume back down to 0
+        bctg            0               # turn off beacon
+        br              start           # loop to start
 
-#        instruction     oper1, oper2        # load oper1
-#        instruction     oper1, oper2, oper3 # move something
-label:  
-        instruction     oper1, oper2, oper3 # branch to here
-        instruction     oper1, oper2, oper3 # error handling
-        instruction
-        instruction     oper1, oper2, oper3 # done!
+done:                                   # done; we never hit here

@@ -150,14 +150,17 @@ namespace Simulator
 				case "or":
 					or(ref i, ref m);
 					break;
-				case "jmp":
-					jmp(ref i, ref m);
-					break;
 				case "br":
 					br(ref i, ref m);
 					break;
-				case "bls":
-					bls(ref i, ref m);
+				case "be":
+					be(ref i, ref m);
+					break;
+				case "bl":
+					bl(ref i, ref m);
+					break;
+				case "bg":
+					bg(ref i, ref m);
 					break;
 				case "ble":
 					ble(ref i, ref m);
@@ -312,7 +315,7 @@ namespace Simulator
 		// crdb r0 # put credit balance into r0
 		void crdb(ref Instruction i, ref Machine m)
 		{
-			m.regs["r0"] = m.credits;
+			m.regs[i.field[0]] = m.credits;
 
 			m.ip++;
 		}
@@ -557,6 +560,7 @@ namespace Simulator
 			//   - Dispense money.
 			//	 - These would be handled through sytem
 			//     GPIOs (general purpose IO).
+			m.credits = 0;
 
 			m.ip++;
 		}
@@ -782,19 +786,6 @@ namespace Simulator
 			m.ip++;
 		}
 
-		// JUMP
-		// Jump to an address placed into rX
-		// 32-bit type
-		// opcode, na, location
-		// jmp location # jump to address
-		void jmp(ref Instruction i, ref Machine m)
-		{
-			string a = i.field[0];
-
-			m.ip = m.labels[a];
-		}
-
-
 		// BRANCH
 		// Branch to an address placed into rX
 		// 32-bit type
@@ -812,13 +803,74 @@ namespace Simulator
 		// 32-bit type
 		// opcode, na, location
 		// br location # branch to address
-		void bls(ref Instruction i, ref Machine m)
+		void be(ref Instruction i, ref Machine m)
 		{
 			string a = i.field[0];
 
 			if (m.compare == 1)
 			{
 				m.ip = m.labels[a];
+			}
+			else
+			{
+				m.ip++;
+			}
+		}
+
+		// BRANCH GREATER THAN 
+		// Branch to an address placed into rX if greater than flag is set.
+		// 32-bit type
+		// opcode, na, location
+		// br location # branch to address
+		void bg(ref Instruction i, ref Machine m)
+		{
+			string a = i.field[0];
+
+			if (m.compare == 2)
+			{
+				m.ip = m.labels[a];
+			}
+			else
+			{
+				m.ip++;
+			}
+		}
+
+		// BRANCH GREATER THAN EQUAL
+		// Branch to an address placed into rX if greater than flag is set.
+		// 32-bit type
+		// opcode, na, location
+		// br location # branch to address
+		void bl(ref Instruction i, ref Machine m)
+		{
+			string a = i.field[0];
+
+			if (m.compare == 3)
+			{
+				m.ip = m.labels[a];
+			}
+			else
+			{
+				m.ip++;
+			}
+		}
+
+		// BRANCH GREATER THAN EQUAL
+		// Branch to an address placed into rX if greater than flag is set.
+		// 32-bit type
+		// opcode, na, location
+		// br location # branch to address
+		void bge(ref Instruction i, ref Machine m)
+		{
+			string a = i.field[0];
+
+			if (m.compare == 4)
+			{
+				m.ip = m.labels[a];
+			}
+			else
+			{
+				m.ip++;
 			}
 		}
 
@@ -831,24 +883,13 @@ namespace Simulator
 		{
 			string a = i.field[0];
 
-			if ((m.compare == 0) || (m.compare == 1))
+			if (m.compare == 5)
 			{
 				m.ip = m.labels[a];
 			}
-		}
-
-		// BRANCH LESS THAN EQUAL
-		// Branch to an address placed into rX if greater than flag is set.
-		// 32-bit type
-		// opcode, na, location
-		// br location # branch to address
-		void bge(ref Instruction i, ref Machine m)
-		{
-			string a = i.field[0];
-
-			if (m.compare == 2)
+			else
 			{
-				m.ip = m.labels[a];
+				m.ip++;
 			}
 		}
 
@@ -1023,26 +1064,29 @@ namespace Simulator
 				case "or":
 					opcode = 43;
 					break;
-				case "jmp":
+				case "br":
 					opcode = 44;
 					break;
-				case "br":
+				case "be":
 					opcode = 45;
 					break;
-				case "bl":
+				case "bg":
 					opcode = 46;
 					break;
-				case "ble":
+				case "bl":
 					opcode = 47;
 					break;
 				case "bge":
 					opcode = 48;
 					break;
-				case "cmp":
+				case "ble":
 					opcode = 49;
 					break;
+				case "cmp":
+					opcode = 40;
+					break;
 				case "rand":
-					opcode = 50;
+					opcode = 51;
 					break;
 				default:
 					break;

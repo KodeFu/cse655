@@ -98,7 +98,10 @@ namespace Simulator
 			Instruction instruction = new Instruction();
 
 			// Adjust IP
-			lbExecute.SelectedIndex = mach.ip;
+			if (mach.ip < lbExecute.Items.Count)
+			{ 
+				lbExecute.SelectedIndex = mach.ip;
+			}
 
 			// Parse instruction
 			string sourceLine = lbExecute.SelectedItem.ToString().Substring(4);
@@ -142,6 +145,7 @@ namespace Simulator
 			tbDing.Text = mach.ding.ToString();
 			tbVol.Text = mach.volume.ToString();
 			tbCmp.Text = mach.compare.ToString();
+			tbCredits.Text = mach.credits.ToString();
 
 			// Update encoding
 			tbOpcode.Text = String.Empty;
