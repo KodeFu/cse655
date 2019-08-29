@@ -82,6 +82,7 @@ BEGIN_MESSAGE_MAP(CDemoAppDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CDemoAppDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON4, &CDemoAppDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_ADD_ITEM, &CDemoAppDlg::OnBnClickedAddItem)
+	ON_BN_CLICKED(IDC_STARTENCLAVE, &CDemoAppDlg::OnBnClickedStartenclave)
 END_MESSAGE_MAP()
 
 
@@ -209,3 +210,29 @@ void CDemoAppDlg::OnBnClickedAddItem()
 	float d = std::stof(s);
 }
 
+//#define ENCLAVE_FILE _T("enclave.signed.dll")
+#define ENCLAVE_FILE _T("\\Develop\\cse655\\Demo\\EnclaveTest\\enclave\\Debug\\enclave.signed.dll")
+
+sgx_enclave_id_t g_eid = 0;
+
+void CDemoAppDlg::OnBnClickedStartenclave()
+{
+	sgx_status_t sgxStatus = SGX_SUCCESS;
+	sgx_enclave_id_t eid = 0;
+	int returnValue = 0;
+	sgx_launch_token_t token = { 0 };
+	int updated = 0;;
+
+	// Create the enclave
+	sgxStatus = sgx_create_enclave(ENCLAVE_FILE, SGX_DEBUG_FLAG, &token, &updated, &eid, NULL);
+	if (SGX_SUCCESS != sgxStatus)
+	{
+		printf("(%d) sgx error %#x, failed to create enclave, bailing.\n", GetCurrentThreadId(), sgxStatus);
+		MessageBox(_T("Boo!"));
+		//return -1;
+	}
+
+	printf("(%d) enclave '%ls' successfully loaded\n", GetCurrentThreadId(), ENCLAVE_FILE);
+
+	sgx_destroy_enclave(eid);
+}

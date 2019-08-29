@@ -38,4 +38,5 @@ public:
 	afx_msg void OnBnClickedButton3();
 	CListBox listboxItems;
 	afx_msg void OnBnClickedAddItem();
+	afx_msg void OnBnClickedStartenclave();
 };
