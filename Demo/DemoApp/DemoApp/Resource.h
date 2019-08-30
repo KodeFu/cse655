@@ -9,17 +9,11 @@
 #define IDR_MAINFRAME                   128
 #define IDB_SGX                         130
 #define IDB_CARD                        133
-#define IDB_BITMAP1                     135
 #define IDB_REGISTER                    135
-#define IDC_BUTTON1                     1000
 #define IDC_STOPENCLAVE                 1000
-#define IDC_BUTTON3                     1002
 #define IDC_BACON                       1002
-#define IDC_LIST1                       1003
 #define IDC_LIST_SHOPPING               1003
-#define IDC_BUTTON4                     1004
 #define IDC_CHARGEIT                    1004
-#define IDC_LIST4                       1007
 #define IDC_LIST_ENCLAVE                1007
 #define IDC_STARTENCLAVE                1008
 #define IDC_EGGS                        1009
@@ -30,6 +24,11 @@
 #define IDC_EDIT_NAME                   1015
 #define IDC_EDIT_EXPIRATION             1016
 #define IDC_EDIT_CREDITCARD             1017
+#define IDC_RESET                       1018
+#define IDC_TRANS_PAYMENT               1019
+#define IDC_TRANS_CC                    1020
+#define IDC_TRANS_NAME                  1021
+#define IDC_TRANS_CHARGEAMT             1022
 
 // Next default values for new objects
 // 
@@ -37,7 +36,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1016
+#define _APS_NEXT_CONTROL_VALUE         1023
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

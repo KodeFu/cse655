@@ -33,6 +33,9 @@ int enclaveTestSGX(int input)
 		g_intArray[i] = 0;
 	}
 
+
+	ocall_print_string("hello");
+
 	return input + input;
 }
 

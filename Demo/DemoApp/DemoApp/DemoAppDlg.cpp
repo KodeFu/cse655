@@ -16,13 +16,21 @@
 #include "sgx_urts.h"
 #include "enclave_u.h"
 
+//#define ENCLAVE_FILE _T("enclave.signed.dll")
+#define ENCLAVE_FILE _T("\\Develop\\cse655\\Demo\\EnclaveTest\\enclave\\Debug\\enclave.signed.dll")
+
+sgx_enclave_id_t g_eid = 0;
+CListBox *g_listboxEnclave;
+
 /* OCall functions */
 void ocall_print_string(const char *str)
 {
 	/* Proxy/Bridge will check the length and null-terminate
 	 * the input string to prevent buffer overflow.
 	 */
-	printf("%s", str);
+	CString buf;
+	buf.Format(_T("T: %s"), str);
+	g_listboxEnclave->AddString(buf);
 }
 
 // CAboutDlg dialog used for App About
@@ -68,30 +76,41 @@ CDemoAppDlg::CDemoAppDlg(CWnd* pParent /*=nullptr*/)
 	, ccName(_T(""))
 	, ccCardNumber(_T(""))
 	, ccExpiration(_T(""))
+	, transPayment(_T(""))
+	, transCC(_T(""))
+	, transName(_T(""))
+	, transChargeAmt(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	g_listboxEnclave = &listboxEnclave;
 }
 
 void CDemoAppDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_LIST4, listboxEnclave);
-	DDX_Control(pDX, IDC_LIST1, listboxItems);
+	DDX_Control(pDX, IDC_LIST_ENCLAVE, listboxEnclave);
+	DDX_Control(pDX, IDC_LIST_SHOPPING, listboxItems);
 	DDX_Text(pDX, IDC_EDIT_NAME, ccName);
 	DDX_Text(pDX, IDC_EDIT_CREDITCARD, ccCardNumber);
 	DDX_Text(pDX, IDC_EDIT_EXPIRATION, ccExpiration);
 	DDX_Text(pDX, IDC_TOTAL, nTotal);
+	DDX_Text(pDX, IDC_TRANS_PAYMENT, transPayment);
+	DDX_Text(pDX, IDC_TRANS_CC, transCC);
+	DDX_Text(pDX, IDC_TRANS_NAME, transName);
+	DDX_Text(pDX, IDC_TRANS_CHARGEAMT, transChargeAmt);
 }
 
 BEGIN_MESSAGE_MAP(CDemoAppDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BUTTON4, &CDemoAppDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_STARTENCLAVE, &CDemoAppDlg::OnBnClickedStartenclave)
 	ON_BN_CLICKED(IDC_BACON, &CDemoAppDlg::OnBnClickedBacon)
 	ON_BN_CLICKED(IDC_EGGS, &CDemoAppDlg::OnBnClickedEggs)
 	ON_BN_CLICKED(IDC_MILK, &CDemoAppDlg::OnBnClickedMilk)
+	ON_BN_CLICKED(IDC_STOPENCLAVE, &CDemoAppDlg::OnBnClickedStopenclave)
+	ON_BN_CLICKED(IDC_RESET, &CDemoAppDlg::OnBnClickedReset)
+	ON_BN_CLICKED(IDC_CHARGEIT, &CDemoAppDlg::OnBnClickedChargeit)
 END_MESSAGE_MAP()
 
 
@@ -127,12 +146,23 @@ BOOL CDemoAppDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	Reset();
+
+	return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
+void CDemoAppDlg::Reset()
+{
+	OnBnClickedStopenclave();
+
+	nTotal = 0.00;
 	ccName = "John Smith";
-	ccCardNumber = "4571661043233207";
+	ccCardNumber = "4571 6610 4323 3207";
 	ccExpiration = "06/2020";
 	UpdateData(false);
 
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	listboxEnclave.ResetContent();
+	listboxItems.ResetContent();
 }
 
 void CDemoAppDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -185,40 +215,6 @@ HCURSOR CDemoAppDlg::OnQueryDragIcon()
 }
 
 
-void CDemoAppDlg::OnBnClickedButton4()
-{
-	// TODO: Add your control notification handler code here
-	listboxEnclave.AddString(_T("yo...."));
-}
-
-//#define ENCLAVE_FILE _T("enclave.signed.dll")
-#define ENCLAVE_FILE _T("\\Develop\\cse655\\Demo\\EnclaveTest\\enclave\\Debug\\enclave.signed.dll")
-
-sgx_enclave_id_t g_eid = 0;
-
-void CDemoAppDlg::OnBnClickedStartenclave()
-{
-	sgx_status_t sgxStatus = SGX_SUCCESS;
-	sgx_enclave_id_t eid = 0;
-	int returnValue = 0;
-	sgx_launch_token_t token = { 0 };
-	int updated = 0;;
-
-	// Create the enclave
-	sgxStatus = sgx_create_enclave(ENCLAVE_FILE, SGX_DEBUG_FLAG, &token, &updated, &eid, NULL);
-	if (SGX_SUCCESS != sgxStatus)
-	{
-		printf("(%d) sgx error %#x, failed to create enclave, bailing.\n", GetCurrentThreadId(), sgxStatus);
-		MessageBox(_T("Boo!"));
-		//return -1;
-	}
-
-	printf("(%d) enclave '%ls' successfully loaded\n", GetCurrentThreadId(), ENCLAVE_FILE);
-
-	sgx_destroy_enclave(eid);
-}
-
-
 void CDemoAppDlg::OnBnClickedBacon()
 {
 	listboxItems.AddString(_T("Smoked Bacon\t$3.99"));
@@ -249,4 +245,91 @@ void CDemoAppDlg::OnBnClickedMilk()
 	UpdateData(true);
 	nTotal += 2.97;
 	UpdateData(false);
+}
+
+void CDemoAppDlg::OnBnClickedStartenclave()
+{
+	sgx_status_t sgxStatus = SGX_SUCCESS;
+	int returnValue = 0;
+	sgx_launch_token_t token = { 0 };
+	int updated = 0;;
+
+	// Create the enclave
+	sgxStatus = sgx_create_enclave(ENCLAVE_FILE, SGX_DEBUG_FLAG, &token, &updated, &g_eid, NULL);
+	if (SGX_SUCCESS != sgxStatus)
+	{
+		CString buf;
+		buf.Format("U: sgx error %#x, failed to create enclave, bailing.\n", sgxStatus);
+		listboxEnclave.AddString(buf);
+	}
+
+	CString buf;
+	buf.Format(_T("U: enclave successfully loaded."));
+	listboxEnclave.AddString(buf);
+
+	int testValue = 10;
+	sgxStatus = enclaveTestSGX(g_eid, &returnValue, testValue);
+
+	if (SGX_SUCCESS != sgxStatus)
+	{
+		buf.Format(_T("U: (%d) enclave test failed."), GetCurrentThreadId());
+		listboxEnclave.AddString(buf);
+	}
+
+	buf.Format(_T("U: enclave test successful."));
+	listboxEnclave.AddString(buf);
+
+}
+
+void CDemoAppDlg::OnBnClickedStopenclave()
+{
+	CString buf;
+
+	if (g_eid != 0)
+	{
+		sgx_destroy_enclave(g_eid);
+	
+		buf.Format("U: enclave successfully unloaded.");
+		listboxEnclave.AddString(buf);
+
+		return;
+	}
+
+	buf.Format(_T("U: enclave not currently loaded."));
+	listboxEnclave.AddString(buf);
+}
+
+
+void CDemoAppDlg::OnBnClickedReset()
+{
+	Reset();
+}
+
+
+void CDemoAppDlg::OnBnClickedChargeit()
+{
+	// Encrypt data as a string
+	ccName;
+	ccCardNumber;
+	ccExpiration;
+	nTotal;
+
+	CString encrypted;
+	encrypted.Format(_T("%s-%s-%s-%.2f"), ccName, ccCardNumber, ccExpiration, nTotal);
+	char buf[100];
+	strcpy_s(buf, encrypted.GetString());
+
+	size_t len = strlen(buf);
+	for (int i = 0; i < len; i++)
+	{
+		buf[i] = ~buf[i];
+	}
+
+	for (int i = 0; i < len; i++)
+	{
+		buf[i] = ~buf[i];
+	}
+
+	listboxEnclave.AddString(encrypted);
+	// Send to enclave
 }

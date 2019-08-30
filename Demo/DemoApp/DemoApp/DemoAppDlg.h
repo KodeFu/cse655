@@ -34,18 +34,23 @@ protected:
 public:
 //	afx_msg void OnBnClickedButton1();
 	CListBox listboxEnclave;
-	afx_msg void OnBnClickedButton4();
-	afx_msg void OnBnClickedButton3();
 	CListBox listboxItems;
-	afx_msg void OnBnClickedAddItem();
 	afx_msg void OnBnClickedStartenclave();
 	afx_msg void OnBnClickedBacon();
 	afx_msg void OnBnClickedEggs();
 	afx_msg void OnBnClickedMilk();
-	//CStatic labelTotal;
-	float nTotal;
+	void Reset();
+
+	double nTotal;
 	CString ccName;
 	CString ccCardNumber;
 	CString ccExpiration;
 
+	afx_msg void OnBnClickedStopenclave();
+	afx_msg void OnBnClickedReset();
+	CString transPayment;
+	CString transCC;
+	CString transName;
+	CString transChargeAmt;
+	afx_msg void OnBnClickedChargeit();
 };
