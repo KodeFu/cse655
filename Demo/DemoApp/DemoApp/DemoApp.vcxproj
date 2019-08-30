@@ -243,7 +243,11 @@
     <None Include="res\DemoApp.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\card.bmp" />
     <Image Include="res\DemoApp.ico" />
+    <Image Include="res\register.bmp" />
+    <Image Include="res\sgx.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

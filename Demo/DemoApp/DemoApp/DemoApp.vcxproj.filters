@@ -65,6 +65,18 @@
     <Image Include="res\DemoApp.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\sgx.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\card.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\register.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\EnclaveTest\enclave\enclave\enclave.edl">

@@ -63,7 +63,11 @@ END_MESSAGE_MAP()
 
 
 CDemoAppDlg::CDemoAppDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_MFCAPPLICATION1_DIALOG, pParent)
+	: CDialogEx(IDD_DEMOAPP_DIALOG, pParent)
+	, nTotal(0.0)
+	, ccName(_T(""))
+	, ccCardNumber(_T(""))
+	, ccExpiration(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -73,16 +77,21 @@ void CDemoAppDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST4, listboxEnclave);
 	DDX_Control(pDX, IDC_LIST1, listboxItems);
+	DDX_Text(pDX, IDC_EDIT_NAME, ccName);
+	DDX_Text(pDX, IDC_EDIT_CREDITCARD, ccCardNumber);
+	DDX_Text(pDX, IDC_EDIT_EXPIRATION, ccExpiration);
+	DDX_Text(pDX, IDC_TOTAL, nTotal);
 }
 
 BEGIN_MESSAGE_MAP(CDemoAppDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BUTTON1, &CDemoAppDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON4, &CDemoAppDlg::OnBnClickedButton4)
-	ON_BN_CLICKED(IDC_ADD_ITEM, &CDemoAppDlg::OnBnClickedAddItem)
 	ON_BN_CLICKED(IDC_STARTENCLAVE, &CDemoAppDlg::OnBnClickedStartenclave)
+	ON_BN_CLICKED(IDC_BACON, &CDemoAppDlg::OnBnClickedBacon)
+	ON_BN_CLICKED(IDC_EGGS, &CDemoAppDlg::OnBnClickedEggs)
+	ON_BN_CLICKED(IDC_MILK, &CDemoAppDlg::OnBnClickedMilk)
 END_MESSAGE_MAP()
 
 
@@ -118,6 +127,10 @@ BOOL CDemoAppDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	ccName = "John Smith";
+	ccCardNumber = "4571661043233207";
+	ccExpiration = "06/2020";
+	UpdateData(false);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -172,42 +185,10 @@ HCURSOR CDemoAppDlg::OnQueryDragIcon()
 }
 
 
-
-void CDemoAppDlg::OnBnClickedButton1()
-{
-	// TODO: Add your control notification handler code here
-	MessageBox(_T("Boo2!"), _T("Boo!"));
-	
-}
-
-
 void CDemoAppDlg::OnBnClickedButton4()
 {
 	// TODO: Add your control notification handler code here
 	listboxEnclave.AddString(_T("yo...."));
-}
-
-
-void CDemoAppDlg::OnBnClickedAddItem()
-{
-	// TODO: Add your control notification handler code here
-	listboxItems.AddString(_T("bacon $4.00"));
-
-	CString str = _T("bacon $4.00");
-	int nTokenPos = 0;
-	CString strToken = str.Tokenize(_T("$"), nTokenPos);
-	MessageBox(strToken);
-	strToken = str.Tokenize(_T("$"), nTokenPos);
-	CString blah = _T("'");
-	blah.Append(strToken);
-	blah.Append(_T("'"));
-
-	MessageBox(blah);
-
-	float yo = 0.0;
-	//yo = std::stod(strToken);
-	std::string s((LPCTSTR)strToken);
-	float d = std::stof(s);
 }
 
 //#define ENCLAVE_FILE _T("enclave.signed.dll")
@@ -235,4 +216,37 @@ void CDemoAppDlg::OnBnClickedStartenclave()
 	printf("(%d) enclave '%ls' successfully loaded\n", GetCurrentThreadId(), ENCLAVE_FILE);
 
 	sgx_destroy_enclave(eid);
+}
+
+
+void CDemoAppDlg::OnBnClickedBacon()
+{
+	listboxItems.AddString(_T("Smoked Bacon\t$3.99"));
+	
+	// Update total
+	UpdateData(true);
+	nTotal += 3.99;
+	UpdateData(false);
+}
+
+
+void CDemoAppDlg::OnBnClickedEggs()
+{
+	listboxItems.AddString(_T("Grade A Eggs\t$0.99"));
+
+	// Update total
+	UpdateData(true);
+	nTotal += 0.99;
+	UpdateData(false);
+}
+
+
+void CDemoAppDlg::OnBnClickedMilk()
+{
+	listboxItems.AddString(_T("Whole Milk\t$2.98"));
+
+	// Update total
+	UpdateData(true);
+	nTotal += 2.97;
+	UpdateData(false);
 }
