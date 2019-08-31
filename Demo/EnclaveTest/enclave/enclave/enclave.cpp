@@ -105,6 +105,11 @@ void enclaveChargeIt(const char* card_info, uint32_t card_info_size)
 	char transaction[BUFSIZ];
 	snprintf(transaction, BUFSIZ, "%s-%s-%s-%s", amount, ccMask, exp, transBytes /*buf card_info*/);
 
+	for (int i = 0; *(tokens + i); i++)
+    {
+            free(*(tokens + i));
+     }
+
 	// send decrypted
 	ocall_send_receipt(transaction);
 }
