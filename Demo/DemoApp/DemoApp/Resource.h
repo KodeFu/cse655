@@ -29,7 +29,6 @@
 #define IDC_TRANS_CC                    1020
 #define IDC_TRANS_NAME                  1021
 #define IDC_TRANS_CHARGEAMT             1022
-#define IDC_TRANSACTION                 1023
 
 // Next default values for new objects
 // 

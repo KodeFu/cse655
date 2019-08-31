@@ -182,3 +182,17 @@ sgx_status_t enclaveChargeIt(sgx_enclave_id_t eid, const char* card_info, uint32
 	return status;
 }
 
+sgx_status_t pair(sgx_enclave_id_t eid)
+{
+	sgx_status_t status;
+	status = sgx_ecall(eid, 5, &ocall_table_enclave, NULL);
+	return status;
+}
+
+sgx_status_t unpair(sgx_enclave_id_t eid)
+{
+	sgx_status_t status;
+	status = sgx_ecall(eid, 6, &ocall_table_enclave, NULL);
+	return status;
+}
+

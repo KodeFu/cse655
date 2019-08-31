@@ -18,6 +18,8 @@ void enclaveTestSGXSetValue(int input);
 int enclaveTestSGXGetValue(void);
 int enclaveTestSGXWriteValue(int index, int value);
 void enclaveChargeIt(const char* card_info, uint32_t card_info_size);
+void pair(void);
+void unpair(void);
 
 sgx_status_t SGX_CDECL ocall_print_string(const char* str);
 sgx_status_t SGX_CDECL ocall_send_receipt(const char* str);

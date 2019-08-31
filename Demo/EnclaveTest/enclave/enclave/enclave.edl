@@ -8,6 +8,8 @@ enclave {
 		public int enclaveTestSGXGetValue();
 		public int enclaveTestSGXWriteValue(int index, int value);
 		public void enclaveChargeIt([in, size=card_info_size] const char* card_info, uint32_t card_info_size);
+		public void pair();
+		public void unpair();
 
     };
 

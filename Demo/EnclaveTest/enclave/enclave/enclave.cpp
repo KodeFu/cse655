@@ -6,6 +6,7 @@
 #include "string.h"
 #include "stdlib.h"
 
+int g_pair = 0;
 int g_value = 0;
 int g_key = 0;
 int g_intArray[20];
@@ -59,15 +60,39 @@ char *getEncryptedTranaction(char value)
 	}
 }
 
+void pair()
+{
+	g_pair = 1;
+	ocall_print_string("sucessfully paired device");
+}
+
+void unpair()
+{
+	g_pair = 0;
+	ocall_print_string("device is now unpaired");
+}
+
 void enclaveChargeIt(const char* card_info, uint32_t card_info_size)
 {
 	char buf[BUFSIZ];
+	memset(buf, 0, BUFSIZ);
+
+	if (!g_pair)
+	{
+		ocall_print_string("no device paired");
+		return;
+	}
+
+	ocall_print_string("received card swipe data");
 
 	// Decrypt
 	for (int i = 0; i < card_info_size; i++)
 	{
 		buf[i] = ~card_info[i];
 	}
+
+	ocall_print_string("decrypted card swipe data");
+	ocall_print_string(buf);
 
 	// split stuff
 	char** tokens;
@@ -93,6 +118,12 @@ void enclaveChargeIt(const char* card_info, uint32_t card_info_size)
 		ccMask[i] = 'X';
 	}
 
+	ocall_print_string("generating bank transaction data");
+	char keyText[50];
+	snprintf(keyText, 50, "using provisioned key %d", g_key);
+	ocall_print_string(keyText);
+	ocall_print_string("generating bank transaction data");
+
 	char transBytes[BUFSIZ];
 	char *encTrans = getEncryptedTranaction( g_key++ );
 	if (g_key > 11) g_key = 0;
@@ -111,6 +142,8 @@ void enclaveChargeIt(const char* card_info, uint32_t card_info_size)
      }
 
 	// send decrypted
+	ocall_print_string("sending plain text pos data");
+	ocall_print_string("sending encrypted transaction data");
 	ocall_send_receipt(transaction);
 }
 
@@ -125,7 +158,7 @@ int enclaveTestSGX(int input)
 	}
 
 
-	ocall_print_string("hello");
+	ocall_print_string("sgx is ok");
 
 	return input + input;
 }

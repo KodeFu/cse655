@@ -137,6 +137,9 @@ BEGIN_MESSAGE_MAP(CDemoAppDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_STOPENCLAVE, &CDemoAppDlg::OnBnClickedStopenclave)
 	ON_BN_CLICKED(IDC_RESET, &CDemoAppDlg::OnBnClickedReset)
 	ON_BN_CLICKED(IDC_CHARGEIT, &CDemoAppDlg::OnBnClickedChargeit)
+	ON_BN_CLICKED(IDC_PAIR, &CDemoAppDlg::OnBnClickedPair)
+	ON_BN_CLICKED(IDC_UNPAIR, &CDemoAppDlg::OnBnClickedUnpair)
+	ON_STN_CLICKED(IDC_TRANS_NAME, &CDemoAppDlg::OnStnClickedTransName)
 END_MESSAGE_MAP()
 
 
@@ -285,12 +288,12 @@ void CDemoAppDlg::OnBnClickedStartenclave()
 	if (SGX_SUCCESS != sgxStatus)
 	{
 		CString buf;
-		buf.Format("U: sgx error %#x, failed to create enclave, bailing.\n", sgxStatus);
+		buf.Format("U: sgx error %#x, failed to create enclave, bailing\n", sgxStatus);
 		listboxEnclave.AddString(buf);
 	}
 
 	CString buf;
-	buf.Format(_T("U: enclave successfully loaded."));
+	buf.Format(_T("U: enclave successfully loaded"));
 	listboxEnclave.AddString(buf);
 
 	int testValue = 10;
@@ -298,11 +301,11 @@ void CDemoAppDlg::OnBnClickedStartenclave()
 
 	if (SGX_SUCCESS != sgxStatus)
 	{
-		buf.Format(_T("U: (%d) enclave test failed."), GetCurrentThreadId());
+		buf.Format(_T("U: (%d) enclave test failed"), GetCurrentThreadId());
 		listboxEnclave.AddString(buf);
 	}
 
-	buf.Format(_T("U: enclave test successful."));
+	buf.Format(_T("U: enclave test successful"));
 	listboxEnclave.AddString(buf);
 
 }
@@ -315,13 +318,13 @@ void CDemoAppDlg::OnBnClickedStopenclave()
 	{
 		sgx_destroy_enclave(g_eid);
 	
-		buf.Format("U: enclave successfully unloaded.");
+		buf.Format("U: enclave successfully unloaded");
 		listboxEnclave.AddString(buf);
 
 		return;
 	}
 
-	buf.Format(_T("U: enclave not currently loaded."));
+	buf.Format(_T("U: enclave not currently loaded"));
 	listboxEnclave.AddString(buf);
 }
 
@@ -331,6 +334,18 @@ void CDemoAppDlg::OnBnClickedReset()
 	Reset();
 }
 
+char hexmap[] = {'0', '1', '2', '3', '4', '5', '6', '7',
+                           '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+std::string hexStr(unsigned char *data, int len)
+{
+  std::string s(len * 2, ' ');
+  for (int i = 0; i < len; ++i) {
+    s[2 * i]     = hexmap[(data[i] & 0xF0) >> 4];
+    s[2 * i + 1] = hexmap[data[i] & 0x0F];
+  }
+  return s;
+}
 
 void CDemoAppDlg::OnBnClickedChargeit()
 {
@@ -340,10 +355,10 @@ void CDemoAppDlg::OnBnClickedChargeit()
 	ccExpiration;
 	nTotal;
 
-	CString encrypted;
-	encrypted.Format(_T("%.2f-%s-%s-%s"), nTotal, ccCardNumber, ccExpiration, ccName);
+	CString plainText;
+	plainText.Format(_T("%.2f-%s-%s-%s"), nTotal, ccCardNumber, ccExpiration, ccName);
 	char buf[100];
-	strcpy_s(buf, encrypted.GetString());
+	strcpy_s(buf, plainText.GetString());
 
 	size_t len = strlen(buf);
 
@@ -353,12 +368,39 @@ void CDemoAppDlg::OnBnClickedChargeit()
 		buf[i] = ~buf[i];
 	}
 
-	listboxEnclave.AddString(encrypted);
+	CString status;
+	status.Format(_T("U: plain text %s"), plainText);
+	listboxEnclave.AddString(status);
+	std::string hexString = hexStr((unsigned char *) plainText.GetString(), plainText.GetLength());
+	status.Format(_T("U: encrypted %s"), hexString.c_str());
+	listboxEnclave.AddString(status);
+	listboxEnclave.AddString("U: sending card swipe");
 
 	// Send to enclave
 	char card_info[512];
-	sprintf_s(card_info, buf);
+	memset(card_info, 0, 512);
+	sprintf_s(card_info, "%s", buf);
 	int card_info_len = strlen(card_info);
 	printf("card_info_len = %d\n", card_info_len);
 	enclaveChargeIt(g_eid, card_info, card_info_len);
+}
+
+
+void CDemoAppDlg::OnBnClickedPair()
+{
+	// TODO: Add your control notification handler code here
+	pair(g_eid);
+}
+
+
+void CDemoAppDlg::OnBnClickedUnpair()
+{
+	// TODO: Add your control notification handler code here
+	unpair(g_eid);
+}
+
+
+void CDemoAppDlg::OnStnClickedTransName()
+{
+	// TODO: Add your control notification handler code here
 }

@@ -48,6 +48,8 @@ sgx_status_t enclaveTestSGXSetValue(sgx_enclave_id_t eid, int input);
 sgx_status_t enclaveTestSGXGetValue(sgx_enclave_id_t eid, int* retval);
 sgx_status_t enclaveTestSGXWriteValue(sgx_enclave_id_t eid, int* retval, int index, int value);
 sgx_status_t enclaveChargeIt(sgx_enclave_id_t eid, const char* card_info, uint32_t card_info_size);
+sgx_status_t pair(sgx_enclave_id_t eid);
+sgx_status_t unpair(sgx_enclave_id_t eid);
 
 #ifdef __cplusplus
 }

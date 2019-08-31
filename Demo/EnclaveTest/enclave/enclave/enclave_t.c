@@ -203,33 +203,51 @@ err:
 	return status;
 }
 
+static sgx_status_t SGX_CDECL sgx_pair(void* pms)
+{
+	sgx_status_t status = SGX_SUCCESS;
+	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
+	pair();
+	return status;
+}
+
+static sgx_status_t SGX_CDECL sgx_unpair(void* pms)
+{
+	sgx_status_t status = SGX_SUCCESS;
+	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
+	unpair();
+	return status;
+}
+
 SGX_EXTERNC const struct {
 	size_t nr_ecall;
-	struct {void* call_addr; uint8_t is_priv;} ecall_table[5];
+	struct {void* call_addr; uint8_t is_priv;} ecall_table[7];
 } g_ecall_table = {
-	5,
+	7,
 	{
 		{(void*)(uintptr_t)sgx_enclaveTestSGX, 0},
 		{(void*)(uintptr_t)sgx_enclaveTestSGXSetValue, 0},
 		{(void*)(uintptr_t)sgx_enclaveTestSGXGetValue, 0},
 		{(void*)(uintptr_t)sgx_enclaveTestSGXWriteValue, 0},
 		{(void*)(uintptr_t)sgx_enclaveChargeIt, 0},
+		{(void*)(uintptr_t)sgx_pair, 0},
+		{(void*)(uintptr_t)sgx_unpair, 0},
 	}
 };
 
 SGX_EXTERNC const struct {
 	size_t nr_ocall;
-	uint8_t entry_table[7][5];
+	uint8_t entry_table[7][7];
 } g_dyn_entry_table = {
 	7,
 	{
-		{0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
 	}
 };
 

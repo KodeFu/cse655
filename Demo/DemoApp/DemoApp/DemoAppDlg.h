@@ -53,4 +53,7 @@ public:
 	CString transName;
 	CString transChargeAmt;
 	afx_msg void OnBnClickedChargeit();
+	afx_msg void OnBnClickedPair();
+	afx_msg void OnBnClickedUnpair();
+	afx_msg void OnStnClickedTransName();
 };
