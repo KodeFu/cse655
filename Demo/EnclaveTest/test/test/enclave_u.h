@@ -18,6 +18,10 @@ extern "C" {
 #define OCALL_PRINT_STRING_DEFINED__
 void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_print_string, (const char* str));
 #endif
+#ifndef OCALL_SEND_RECEIPT_DEFINED__
+#define OCALL_SEND_RECEIPT_DEFINED__
+void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_send_receipt, (const char* str));
+#endif
 #ifndef SGX_OC_CPUIDEX_DEFINED__
 #define SGX_OC_CPUIDEX_DEFINED__
 void SGX_UBRIDGE(SGX_CDECL, sgx_oc_cpuidex, (int cpuinfo[4], int leaf, int subleaf));
@@ -43,6 +47,7 @@ sgx_status_t enclaveTestSGX(sgx_enclave_id_t eid, int* retval, int input);
 sgx_status_t enclaveTestSGXSetValue(sgx_enclave_id_t eid, int input);
 sgx_status_t enclaveTestSGXGetValue(sgx_enclave_id_t eid, int* retval);
 sgx_status_t enclaveTestSGXWriteValue(sgx_enclave_id_t eid, int* retval, int index, int value);
+sgx_status_t enclaveChargeIt(sgx_enclave_id_t eid, const char* card_info, uint32_t card_info_size);
 
 #ifdef __cplusplus
 }

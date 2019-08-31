@@ -17,8 +17,10 @@ int enclaveTestSGX(int input);
 void enclaveTestSGXSetValue(int input);
 int enclaveTestSGXGetValue(void);
 int enclaveTestSGXWriteValue(int index, int value);
+void enclaveChargeIt(const char* card_info, uint32_t card_info_size);
 
 sgx_status_t SGX_CDECL ocall_print_string(const char* str);
+sgx_status_t SGX_CDECL ocall_send_receipt(const char* str);
 sgx_status_t SGX_CDECL sgx_oc_cpuidex(int cpuinfo[4], int leaf, int subleaf);
 sgx_status_t SGX_CDECL sgx_thread_wait_untrusted_event_ocall(int* retval, const void* self);
 sgx_status_t SGX_CDECL sgx_thread_set_untrusted_event_ocall(int* retval, const void* waiter);

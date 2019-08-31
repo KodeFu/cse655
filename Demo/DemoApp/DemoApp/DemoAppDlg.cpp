@@ -1,7 +1,6 @@
 
 // MFCApplication1Dlg.cpp : implementation file
 //
-
 #include "stdafx.h"
 #include "DemoApp.h"
 #include "DemoAppDlg.h"
@@ -21,6 +20,7 @@
 
 sgx_enclave_id_t g_eid = 0;
 CListBox *g_listboxEnclave;
+CDemoAppDlg *g_demoAppDlg;
 
 /* OCall functions */
 void ocall_print_string(const char *str)
@@ -30,6 +30,31 @@ void ocall_print_string(const char *str)
 	 */
 	CString buf;
 	buf.Format(_T("T: %s"), str);
+	g_listboxEnclave->AddString(buf);
+}
+
+void ocall_send_receipt(const char *str)
+{
+	/* Proxy/Bridge will check the length and null-terminate
+	 * the input string to prevent buffer overflow.
+	 */
+	CString buf;
+	buf.Format(_T("T: %s"), str);
+
+	// Split strings
+	int nTokenPos = 0;
+	CString cstr;
+	cstr.Format(_T("%s"), str);
+	CString transChargeAmt = cstr.Tokenize(_T("-"), nTokenPos);
+	CString transCC = cstr.Tokenize(_T("-"), nTokenPos);
+	cstr.Tokenize(_T("-"), nTokenPos);
+	CString transName = cstr.Tokenize(_T("-"), nTokenPos);
+
+	g_demoAppDlg->transChargeAmt = transChargeAmt;
+	g_demoAppDlg->transCC = transCC;
+	g_demoAppDlg->transName = transName;
+	g_demoAppDlg->UpdateData(false);
+	
 	g_listboxEnclave->AddString(buf);
 }
 
@@ -83,6 +108,8 @@ CDemoAppDlg::CDemoAppDlg(CWnd* pParent /*=nullptr*/)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	g_listboxEnclave = &listboxEnclave;
+
+	g_demoAppDlg = this;
 }
 
 void CDemoAppDlg::DoDataExchange(CDataExchange* pDX)
@@ -94,7 +121,6 @@ void CDemoAppDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_CREDITCARD, ccCardNumber);
 	DDX_Text(pDX, IDC_EDIT_EXPIRATION, ccExpiration);
 	DDX_Text(pDX, IDC_TOTAL, nTotal);
-	DDX_Text(pDX, IDC_TRANS_PAYMENT, transPayment);
 	DDX_Text(pDX, IDC_TRANS_CC, transCC);
 	DDX_Text(pDX, IDC_TRANS_NAME, transName);
 	DDX_Text(pDX, IDC_TRANS_CHARGEAMT, transChargeAmt);
@@ -157,7 +183,7 @@ void CDemoAppDlg::Reset()
 
 	nTotal = 0.00;
 	ccName = "John Smith";
-	ccCardNumber = "4571 6610 4323 3207";
+	ccCardNumber = "4571661043233207";
 	ccExpiration = "06/2020";
 	UpdateData(false);
 
@@ -315,21 +341,24 @@ void CDemoAppDlg::OnBnClickedChargeit()
 	nTotal;
 
 	CString encrypted;
-	encrypted.Format(_T("%s-%s-%s-%.2f"), ccName, ccCardNumber, ccExpiration, nTotal);
+	encrypted.Format(_T("%.2f-%s-%s-%s"), nTotal, ccCardNumber, ccExpiration, ccName);
 	char buf[100];
 	strcpy_s(buf, encrypted.GetString());
 
 	size_t len = strlen(buf);
-	for (int i = 0; i < len; i++)
-	{
-		buf[i] = ~buf[i];
-	}
 
+	// Encrypt
 	for (int i = 0; i < len; i++)
 	{
 		buf[i] = ~buf[i];
 	}
 
 	listboxEnclave.AddString(encrypted);
+
 	// Send to enclave
+	char card_info[512];
+	sprintf_s(card_info, buf);
+	int card_info_len = strlen(card_info);
+	printf("card_info_len = %d\n", card_info_len);
+	enclaveChargeIt(g_eid, card_info, card_info_len);
 }

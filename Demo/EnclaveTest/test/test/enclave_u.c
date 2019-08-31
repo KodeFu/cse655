@@ -20,9 +20,18 @@ typedef struct ms_enclaveTestSGXWriteValue_t {
 	int ms_value;
 } ms_enclaveTestSGXWriteValue_t;
 
+typedef struct ms_enclaveChargeIt_t {
+	const char* ms_card_info;
+	uint32_t ms_card_info_size;
+} ms_enclaveChargeIt_t;
+
 typedef struct ms_ocall_print_string_t {
 	const char* ms_str;
 } ms_ocall_print_string_t;
+
+typedef struct ms_ocall_send_receipt_t {
+	const char* ms_str;
+} ms_ocall_send_receipt_t;
 
 typedef struct ms_sgx_oc_cpuidex_t {
 	int* ms_cpuinfo;
@@ -56,6 +65,14 @@ static sgx_status_t SGX_CDECL enclave_ocall_print_string(void* pms)
 {
 	ms_ocall_print_string_t* ms = SGX_CAST(ms_ocall_print_string_t*, pms);
 	ocall_print_string(ms->ms_str);
+
+	return SGX_SUCCESS;
+}
+
+static sgx_status_t SGX_CDECL enclave_ocall_send_receipt(void* pms)
+{
+	ms_ocall_send_receipt_t* ms = SGX_CAST(ms_ocall_send_receipt_t*, pms);
+	ocall_send_receipt(ms->ms_str);
 
 	return SGX_SUCCESS;
 }
@@ -102,11 +119,12 @@ static sgx_status_t SGX_CDECL enclave_sgx_thread_set_multiple_untrusted_events_o
 
 static const struct {
 	size_t nr_ocall;
-	void * func_addr[6];
+	void * func_addr[7];
 } ocall_table_enclave = {
-	6,
+	7,
 	{
 		(void*)(uintptr_t)enclave_ocall_print_string,
+		(void*)(uintptr_t)enclave_ocall_send_receipt,
 		(void*)(uintptr_t)enclave_sgx_oc_cpuidex,
 		(void*)(uintptr_t)enclave_sgx_thread_wait_untrusted_event_ocall,
 		(void*)(uintptr_t)enclave_sgx_thread_set_untrusted_event_ocall,
@@ -151,6 +169,16 @@ sgx_status_t enclaveTestSGXWriteValue(sgx_enclave_id_t eid, int* retval, int ind
 	ms.ms_value = value;
 	status = sgx_ecall(eid, 3, &ocall_table_enclave, &ms);
 	if (status == SGX_SUCCESS && retval) *retval = ms.ms_retval;
+	return status;
+}
+
+sgx_status_t enclaveChargeIt(sgx_enclave_id_t eid, const char* card_info, uint32_t card_info_size)
+{
+	sgx_status_t status;
+	ms_enclaveChargeIt_t ms;
+	ms.ms_card_info = card_info;
+	ms.ms_card_info_size = card_info_size;
+	status = sgx_ecall(eid, 4, &ocall_table_enclave, &ms);
 	return status;
 }
 

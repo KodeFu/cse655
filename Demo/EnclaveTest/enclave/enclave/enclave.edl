@@ -7,11 +7,13 @@ enclave {
 		public void enclaveTestSGXSetValue(int input);
 		public int enclaveTestSGXGetValue();
 		public int enclaveTestSGXWriteValue(int index, int value);
+		public void enclaveChargeIt([in, size=card_info_size] const char* card_info, uint32_t card_info_size);
 
     };
 
     untrusted {
         void ocall_print_string([in, string] const char *str);
+		void ocall_send_receipt([in, string] const char *str);
 
     };
 };

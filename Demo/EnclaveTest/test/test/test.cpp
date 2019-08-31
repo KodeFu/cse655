@@ -22,6 +22,15 @@ void ocall_print_string(const char *str)
 	printf("%s", str);
 }
 
+void ocall_send_receipt(const char *str)
+{
+	/* Proxy/Bridge will check the length and null-terminate
+	 * the input string to prevent buffer overflow.
+	 */
+	printf("got this back from enclave: %s\n", str);
+	printf("did i get here");
+}
+
 int sgxTest(sgx_enclave_id_t eid)
 {
 	int returnValue = 0;
@@ -134,7 +143,7 @@ int main()
 	}
 
 	printf("(%d) enclave '%ls' successfully loaded\n", GetCurrentThreadId(), ENCLAVE_FILE);
-
+/*
 	// Make sure SGX is working
 	returnValue = sgxTest(eid);
 	if (0 != returnValue)
@@ -161,8 +170,17 @@ int main()
 	WaitForMultipleObjects(20, thread, TRUE, INFINITE);
 
     printf("(%d) sgxTest() passed\n", GetCurrentThreadId());
-	printf("(%d) done\n", GetCurrentThreadId());
+	*/
 
+	// Charge It
+	char card_info[512];
+	sprintf_s(card_info, "4353 546456 345456 Mudit Vats");
+	int card_info_len = strlen(card_info);
+	printf("card_info_len = %d\n", card_info_len);
+	enclaveChargeIt(eid, card_info, card_info_len);
+
+
+	printf("(%d) done\n", GetCurrentThreadId());
 	sgx_destroy_enclave(eid);
 }
 
