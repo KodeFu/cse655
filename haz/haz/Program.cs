@@ -324,6 +324,17 @@ namespace haz
 
 				for (int i = 0; i < m_instructions.Count; i++)
 				{
+					Console.Write(m_instructions[i].instruction + " ");
+					Console.Write(m_instructions[i].dest);
+					if (m_instructions[i].src != String.Empty)
+					{
+						Console.Write(", " + m_instructions[i].src + "\t");
+					}
+					else
+					{
+						Console.Write("    \t");
+					}
+
 					for (int j = 0; j < 20; j++)
 					{
 						Console.Write(m_instState[i].stage[j] + " ");
