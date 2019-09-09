@@ -180,6 +180,18 @@ namespace haz
 					// do some instruction processing
 					Instruction peek = m_fetchQueue.Peek();
 					string dest = peek.dest;
+					string src = peek.src;
+
+					if (regAvail.ContainsKey(src))
+					{
+						if (!regAvail[src])
+						{
+							// src not available so we are stalling...
+							m_instState[m_fetchQueue.Peek().instructionNum].stage[m_cycles] = "S";
+							return;
+						}
+					}
+
 					if (regAvail[dest])
 					{
 						// registers are clear, so we can dequeue fetchQueue and encode the 
@@ -285,7 +297,7 @@ namespace haz
 				}
 
 
-				while (m_cycles < 10)
+				while (m_cycles < 20)
 				{
 					writeback();
 					memory();
@@ -312,7 +324,7 @@ namespace haz
 
 				for (int i = 0; i < m_instructions.Count; i++)
 				{
-					for (int j = 0; j < 10; j++)
+					for (int j = 0; j < 20; j++)
 					{
 						Console.Write(m_instState[i].stage[j] + " ");
 					}

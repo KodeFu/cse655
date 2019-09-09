@@ -1,0 +1,6 @@
+# Regsiter Data Hazards
+regi r0, 10   # r0 = 10
+addr r1, r0   # r0 = 25 + 10, r0 = 35 
+rand r2, r1   # r3 =  rand()
+subr r1, r0   # r1 = 35 - 25, r1 = 10
+rand r3
