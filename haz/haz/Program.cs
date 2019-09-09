@@ -290,7 +290,7 @@ namespace haz
 			public void doPipeline()
 			{
 
-				for (int i = 0; i <= m_instructions.Count; i++)
+				for (int i = 0; i < m_instructions.Count; i++)
 				{
 					instructionState newInstructionState = new instructionState();
 					m_instState.Add(newInstructionState);
