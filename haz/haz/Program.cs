@@ -14,12 +14,14 @@ namespace haz
 			public string instruction;
 			public string dest;
 			public string src;
+			public int instructionNum;
 
 			public Instruction()
 			{
 				instruction = String.Empty;
 				dest = String.Empty;
 				src = String.Empty;
+				instructionNum = 0;
 			}
 
 			public void Display()
@@ -91,6 +93,22 @@ namespace haz
 			int m_programCounter = 0;
 			int m_cycles = 0;
 
+			public class instructionState
+			{
+				// 100 is number of cycles
+				// each element is stage FDEMW
+				public List<string> stage = new List<string>();
+
+				public instructionState()
+				{
+					for (int i=0; i<100; i++)
+					{
+						stage.Add(".");
+					}
+				}
+			}
+			public List<instructionState> m_instState = new List<instructionState>();
+
 			Queue<Instruction> m_fetchQueue = new Queue<Instruction>();
 			Queue<Instruction> m_decodeQueue = new Queue<Instruction>();
 			Queue<Instruction> m_executeQueue = new Queue<Instruction>();
@@ -98,8 +116,6 @@ namespace haz
 			Queue<Instruction> m_writebackQueue = new Queue<Instruction>();
 
 			Dictionary<string, bool> regAvail = new Dictionary<string, bool>(); // contains availability of r0-r1
-			Dictionary<string, int> regValues = new Dictionary<string, int>(); // contains register values
-			Dictionary<string, int>  regInternal = new Dictionary<string, int>(); // contains internal saved regs
 
 			public Pipeline(List<Instruction> instructions)
 			{
@@ -113,24 +129,6 @@ namespace haz
 				regAvail.Add("r5", true);
 				regAvail.Add("r6", true);
 				regAvail.Add("r7", true);
-
-				regValues.Add("r0", 0);
-				regValues.Add("r1", 0);
-				regValues.Add("r2", 0);
-				regValues.Add("r3", 0);
-				regValues.Add("r4", 0);
-				regValues.Add("r5", 0);
-				regValues.Add("r6", 0);
-				regValues.Add("r7", 0);
-
-				regInternal.Add("r0", 0);
-				regInternal.Add("r1", 0);
-				regInternal.Add("r2", 0);
-				regInternal.Add("r3", 0);
-				regInternal.Add("r4", 0);
-				regInternal.Add("r5", 0);
-				regInternal.Add("r6", 0);
-				regInternal.Add("r7", 0);
 			}
 
 			public void fetch()
@@ -149,7 +147,14 @@ namespace haz
 
 						// increment the program counter to point to the next instruction
 						m_programCounter++;
+
+						m_instState[instruction.instructionNum].stage[m_cycles] = "F";
 					}
+				}
+				else
+				{
+					m_instState[m_fetchQueue.Peek().instructionNum].stage[m_cycles] = "S";
+					Console.WriteLine("fetch stalled");
 				}
 			}
 
@@ -165,23 +170,29 @@ namespace haz
 					// work with it if we already have an item in the decode queue
 					if (m_decodeQueue.Count > 0)
 					{
+						m_instState[m_decodeQueue.Peek().instructionNum].stage[m_cycles] = "S";
+
 						// we are stalled because execute hasn't dequeued this yet
+						Console.WriteLine("decode stalled");
 						return;
 					}
 
-					// free up the fetch queue
-					Instruction instruction = m_fetchQueue.Dequeue();
-
 					// do some instruction processing
-					bool registersAreClear = true;
-					// if reigstersAreClear is false, that means that we have to stall for
-					// another stage to complete
+					Instruction peek = m_fetchQueue.Peek();
+					string dest = peek.dest;
+					if (regAvail[dest])
+					{
+						// registers are clear, so we can dequeue fetchQueue and encode the 
+						// instruction for the next stage
+						Instruction current = m_fetchQueue.Dequeue();
+						regAvail[dest] = false;
+						//regInternal[dest] = regValues[dest];
 
-					if (registersAreClear)
-					{ 
+						m_instState[current.instructionNum].stage[m_cycles] = "D";
+
 						// enqueue the insturction into decode queue, this contains decoded items 
 						// for the next stage -- execute
-						m_decodeQueue.Enqueue(instruction);
+						m_decodeQueue.Enqueue(current);
 					}
 				}
 			}
@@ -193,24 +204,27 @@ namespace haz
 					// work with it if we already have an item in the execute queue
 					if (m_executeQueue.Count > 0)
 					{
+						m_instState[m_executeQueue.Peek().instructionNum].stage[m_cycles] = "S";
+
 						// we are stalled because memory stage hasn't dequeued this yet
+						Console.WriteLine("execute stalled");
 						return;
 					}
 
-					// free up the decode queue
-					Instruction instruction = m_decodeQueue.Dequeue();
-
 					// do some instruction processing
-					bool registersAreClear = true;
-					// if reigstersAreClear is false, that means that we have to stall for
-					// another stage to complete
+					// ALU just does some operation, we don't care about the actual operation.
+					// the actual operations are performed on internal registers, so we just
+					// enque what we have to the next stage
+					
+					// registers are clear, so we can dequeue fetchQueue and encode the 
+					// instruction for the next stage
+					Instruction current = m_decodeQueue.Dequeue();
 
-					if (registersAreClear)
-					{
-						// enqueue the insturction into decode queue, this contains decoded items 
-						// for the next stage -- memory
-						m_executeQueue.Enqueue(instruction);
-					}
+					m_instState[current.instructionNum].stage[m_cycles] = "E";
+
+					// enqueue the insturction into decode queue, this contains decoded items 
+					// for the next stage -- execute
+					m_executeQueue.Enqueue(current);
 				}
 			}
 			public void memory()
@@ -221,58 +235,56 @@ namespace haz
 					// work with it if we already have an item in the execute queue
 					if (m_memoryQueue.Count > 0)
 					{
+						m_instState[m_memoryQueue.Peek().instructionNum].stage[m_cycles] = "S";
+
 						// we are stalled because memory stage hasn't dequeued this yet
+						Console.WriteLine("memory stalled");
 						return;
 					}
 
-					// free up the execute queue
-					Instruction instruction = m_executeQueue.Dequeue();
+					// registers are clear, so we can dequeue fetchQueue and encode the 
+					// instruction for the next stage
+					Instruction current = m_executeQueue.Dequeue();
 
-					// do some instruction processing
-					bool registersAreClear = true;
-					// if reigstersAreClear is false, that means that we have to stall for
-					// another stage to complete
+					m_instState[current.instructionNum].stage[m_cycles] = "M";
 
-					if (registersAreClear)
-					{
-						// enqueue the insturction into decode queue, this contains decoded items 
-						// for the next stage -- memory
-						m_memoryQueue.Enqueue(instruction);
-					}
+					// enqueue the insturction into decode queue, this contains decoded items 
+					// for the next stage -- execute
+					m_memoryQueue.Enqueue(current);
 				}
 			}
 			public void writeback()
 			{
 				if (m_memoryQueue.Count > 0)
 				{
-					// we have something we should dequeue and work with, but we can't 
-					// work with it if we already have an item in the execute queue
-					if (m_writebackQueue.Count > 0)
-					{
-						// we are stalled because memory stage hasn't dequeued this yet
-						return;
-					}
-
-					// free up the decode queue
-					Instruction instruction = m_memoryQueue.Dequeue();
-
 					// do some instruction processing
-					bool registersAreClear = true;
-					// if reigstersAreClear is false, that means that we have to stall for
-					// another stage to complete
-
-					if (registersAreClear)
+					Instruction peek = m_memoryQueue.Peek();
+					string dest = peek.dest;
+					//if (regAvail[dest])
 					{
-						// enqueue the insturction into decode queue, this contains decoded items 
-						// for the next stage -- memory
-						m_writebackQueue.Enqueue(instruction);
+						// registers are clear, so we can dequeue fetchQueue and encode the 
+						// instruction for the next stage
+						Instruction current = m_memoryQueue.Dequeue();
+						regAvail[dest] = true;
+						//regInternal[dest] = regValues[dest];
+
+						m_instState[current.instructionNum].stage[m_cycles] = "W";
+
+						Console.WriteLine(current.instruction);
 					}
 				}
 			}
 
 			public void doPipeline()
 			{
-				
+
+				for (int i = 0; i <= m_instructions.Count; i++)
+				{
+					instructionState newInstructionState = new instructionState();
+					m_instState.Add(newInstructionState);
+				}
+
+
 				while (m_cycles < 10)
 				{
 					writeback();
@@ -281,29 +293,32 @@ namespace haz
 					decode();
 					fetch();
 
-					Display();
-
-					// Hack to drop wb queue else it'll always show empty
-					if (m_writebackQueue.Count > 0)
-					{
-						m_writebackQueue.Dequeue();
-					}
-
 					m_cycles++;
 				}
+
+				Display();
 			}
 
 			public void Display()
 			{
 				StringBuilder sb = new StringBuilder();
-
+				/*
 				sb.Append("cycle " + m_cycles + ": ");
 				sb.Append("F" + m_fetchQueue.Count + " ");
 				sb.Append("D" + m_decodeQueue.Count + " ");
 				sb.Append("E" + m_executeQueue.Count + " ");
 				sb.Append("M" + m_memoryQueue.Count + " ");
-				sb.Append("W" + m_writebackQueue.Count + " ");
-				Console.WriteLine(sb.ToString());
+				Console.WriteLine(sb.ToString());*/
+
+				for (int i = 0; i < m_instructions.Count; i++)
+				{
+					for (int j = 0; j < 10; j++)
+					{
+						Console.Write(m_instState[i].stage[j] + " ");
+					}
+					Console.WriteLine();
+				}
+
 			}
 		}
 
@@ -318,12 +333,14 @@ namespace haz
 			// Parse instruction lines and get valie instructions
 			Parser parser = new Parser();
 			List<Instruction> validInstructions = new List<Instruction>();
+			int instNum = 0;
 			foreach (string s in lines)
 			{
 				Instruction i = new Instruction();
 				parser.Parse(s, ref i);
 				if (i.instruction != string.Empty)
 				{
+					i.instructionNum = instNum++;
 					validInstructions.Add(i);
 				}
 			}
