@@ -97,75 +97,176 @@ namespace haz
 			Queue<Instruction> m_memoryQueue = new Queue<Instruction>();
 			Queue<Instruction> m_writebackQueue = new Queue<Instruction>();
 
-			List<bool> regAvail = new List<bool>(); // contains availability of r0-r1
-			List<int>  regInternal = new List<int>(); // contains internal saved regs
+			Dictionary<string, bool> regAvail = new Dictionary<string, bool>(); // contains availability of r0-r1
+			Dictionary<string, int> regValues = new Dictionary<string, int>(); // contains register values
+			Dictionary<string, int>  regInternal = new Dictionary<string, int>(); // contains internal saved regs
 
 			public Pipeline(List<Instruction> instructions)
 			{
 				m_instructions = instructions;
 
-				for (int i = 0; i < 8; i++)
-				{
-					regAvail.Add(true);
-					regInternal.Add(0);
-				}
+				regAvail.Add("r0", true);
+				regAvail.Add("r1", true);
+				regAvail.Add("r2", true);
+				regAvail.Add("r3", true);
+				regAvail.Add("r4", true);
+				regAvail.Add("r5", true);
+				regAvail.Add("r6", true);
+				regAvail.Add("r7", true);
+
+				regValues.Add("r0", 0);
+				regValues.Add("r1", 0);
+				regValues.Add("r2", 0);
+				regValues.Add("r3", 0);
+				regValues.Add("r4", 0);
+				regValues.Add("r5", 0);
+				regValues.Add("r6", 0);
+				regValues.Add("r7", 0);
+
+				regInternal.Add("r0", 0);
+				regInternal.Add("r1", 0);
+				regInternal.Add("r2", 0);
+				regInternal.Add("r3", 0);
+				regInternal.Add("r4", 0);
+				regInternal.Add("r5", 0);
+				regInternal.Add("r6", 0);
+				regInternal.Add("r7", 0);
 			}
 
 			public void fetch()
 			{
-				if (m_programCounter < m_instructions.Count)
+				// fetch only if the queue is empty; we only have one fetch unit, 
+				// so we are not going to queue more than one fetched instruction
+				if (m_fetchQueue.Count == 0)
 				{
-					Instruction instruction = m_instructions[m_programCounter];
-					m_fetchQueue.Enqueue(instruction);
-					m_programCounter++;
+					if (m_programCounter < m_instructions.Count)
+					{
+						Instruction instruction = m_instructions[m_programCounter];
 
-					instruction.Display();
+						// queue the instruction; the m_fetchQueue contains the instruction to be
+						// processed by the next stage -- decode
+						m_fetchQueue.Enqueue(instruction);
+
+						// increment the program counter to point to the next instruction
+						m_programCounter++;
+					}
 				}
 			}
+
+			// this code will dequeue the fetch queue to grab an instruction
+			// if fetchQueue > 0, then dequeue the instruction, enque it for decode operation.
+			// decode it, save register info
+			// there is only one decode running at a time as well
 			public void decode()
 			{
-				if (m_decodeQueue.Count > 0)
-				{
-					Instruction peek = m_decodeQueue.Peek();
-
-					//if (pe)
-
-					// Decode instruction
-					Instruction current = m_decodeQueue.Dequeue();
-					Console.WriteLine(current.instruction);
-					//Console.WriteLine(current.instruction);
-					//Console.WriteLine(current.instruction);
-				}
-
 				if (m_fetchQueue.Count > 0)
 				{
+					// we have something we should dequeue and work with, but we can't 
+					// work with it if we already have an item in the decode queue
+					if (m_decodeQueue.Count > 0)
+					{
+						// we are stalled because execute hasn't dequeued this yet
+						return;
+					}
+
+					// free up the fetch queue
 					Instruction instruction = m_fetchQueue.Dequeue();
-					m_decodeQueue.Enqueue(instruction);
+
+					// do some instruction processing
+					bool registersAreClear = true;
+					// if reigstersAreClear is false, that means that we have to stall for
+					// another stage to complete
+
+					if (registersAreClear)
+					{ 
+						// enqueue the insturction into decode queue, this contains decoded items 
+						// for the next stage -- execute
+						m_decodeQueue.Enqueue(instruction);
+					}
 				}
 			}
 			public void execute()
 			{
 				if (m_decodeQueue.Count > 0)
 				{
-					Instruction instruction = m_decodeQueue.Dequeue();
-					m_executeQueue.Enqueue(instruction);
-				}
+					// we have something we should dequeue and work with, but we can't 
+					// work with it if we already have an item in the execute queue
+					if (m_executeQueue.Count > 0)
+					{
+						// we are stalled because memory stage hasn't dequeued this yet
+						return;
+					}
 
+					// free up the decode queue
+					Instruction instruction = m_decodeQueue.Dequeue();
+
+					// do some instruction processing
+					bool registersAreClear = true;
+					// if reigstersAreClear is false, that means that we have to stall for
+					// another stage to complete
+
+					if (registersAreClear)
+					{
+						// enqueue the insturction into decode queue, this contains decoded items 
+						// for the next stage -- memory
+						m_executeQueue.Enqueue(instruction);
+					}
+				}
 			}
 			public void memory()
 			{
 				if (m_executeQueue.Count > 0)
 				{
+					// we have something we should dequeue and work with, but we can't 
+					// work with it if we already have an item in the execute queue
+					if (m_memoryQueue.Count > 0)
+					{
+						// we are stalled because memory stage hasn't dequeued this yet
+						return;
+					}
+
+					// free up the execute queue
 					Instruction instruction = m_executeQueue.Dequeue();
-					m_memoryQueue.Enqueue(instruction);
+
+					// do some instruction processing
+					bool registersAreClear = true;
+					// if reigstersAreClear is false, that means that we have to stall for
+					// another stage to complete
+
+					if (registersAreClear)
+					{
+						// enqueue the insturction into decode queue, this contains decoded items 
+						// for the next stage -- memory
+						m_memoryQueue.Enqueue(instruction);
+					}
 				}
 			}
 			public void writeback()
 			{
 				if (m_memoryQueue.Count > 0)
 				{
+					// we have something we should dequeue and work with, but we can't 
+					// work with it if we already have an item in the execute queue
+					if (m_writebackQueue.Count > 0)
+					{
+						// we are stalled because memory stage hasn't dequeued this yet
+						return;
+					}
+
+					// free up the decode queue
 					Instruction instruction = m_memoryQueue.Dequeue();
-					m_writebackQueue.Enqueue(instruction);
+
+					// do some instruction processing
+					bool registersAreClear = true;
+					// if reigstersAreClear is false, that means that we have to stall for
+					// another stage to complete
+
+					if (registersAreClear)
+					{
+						// enqueue the insturction into decode queue, this contains decoded items 
+						// for the next stage -- memory
+						m_writebackQueue.Enqueue(instruction);
+					}
 				}
 			}
 
