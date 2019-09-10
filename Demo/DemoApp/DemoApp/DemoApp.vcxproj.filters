@@ -77,6 +77,9 @@
     <Image Include="res\register.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\reader.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\EnclaveTest\enclave\enclave\enclave.edl">

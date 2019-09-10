@@ -246,6 +246,7 @@
     <Image Include="res\bitmap1.bmp" />
     <Image Include="res\card.bmp" />
     <Image Include="res\DemoApp.ico" />
+    <Image Include="res\reader.bmp" />
     <Image Include="res\register.bmp" />
     <Image Include="res\sgx.bmp" />
   </ItemGroup>

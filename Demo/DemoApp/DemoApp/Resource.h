@@ -10,6 +10,8 @@
 #define IDB_SGX                         130
 #define IDB_CARD                        133
 #define IDB_REGISTER                    135
+#define IDB_BITMAP1                     142
+#define IDB_READER                      142
 #define IDC_STOPENCLAVE                 1000
 #define IDC_BACON                       1002
 #define IDC_LIST_SHOPPING               1003
@@ -34,7 +36,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        136
+#define _APS_NEXT_RESOURCE_VALUE        143
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1025
 #define _APS_NEXT_SYMED_VALUE           101
