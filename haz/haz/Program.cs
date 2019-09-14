@@ -29,6 +29,7 @@ namespace haz
 			public string dest;
 			public string src;
 			public int instructionNum;
+			public bool hazardPresent;
 
 			public Instruction()
 			{
@@ -36,6 +37,7 @@ namespace haz
 				dest = String.Empty;
 				src = String.Empty;
 				instructionNum = 0;
+				hazardPresent = false;
 			}
 
 			public void Display()
@@ -193,6 +195,9 @@ namespace haz
 							{
 								if (!regAvail[src])
 								{
+									// hazard detected
+									instruction.hazardPresent = true;
+
 									// don't enqueue, since we have a data hazard
 									m_flushPipeline = true;
 									m_flushInstructionNumber = m_programCounter - 1;
@@ -202,6 +207,9 @@ namespace haz
 
 							if (!regAvail[dest])
 							{
+								// hazard detected
+								instruction.hazardPresent = true;
+
 								// don't enqueue, since we have a data hazard
 								m_flushPipeline = true;
 								m_flushInstructionNumber = m_programCounter - 1;
@@ -389,6 +397,10 @@ namespace haz
 
 				for (int i = 0; i < m_instructions.Count; i++)
 				{
+					if (m_instructions[i].hazardPresent)
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+					}
 					Console.Write(m_instructions[i].instruction + " ");
 					Console.Write(m_instructions[i].dest);
 					if (m_instructions[i].src != String.Empty)
@@ -405,6 +417,7 @@ namespace haz
 						Console.Write(m_instState[i].stage[j] + " ");
 					}
 					Console.WriteLine();
+					Console.ResetColor();
 				}
 
 				for (int j = 0; j < MAX_CYCLES; j++)
