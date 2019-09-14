@@ -263,7 +263,13 @@ namespace haz
 						// registers are clear, so we can dequeue fetchQueue and encode the 
 						// instruction for the next stage
 						Instruction current = m_fetchQueue.Dequeue();
-						regAvail[dest] = false;
+
+						// memm write memory, so once we decode, we don't need to writeback,
+						// so, don't hold onto the register
+						if (current.instruction != "memm")
+						{
+							regAvail[dest] = false;
+						}
 
 						m_instState[current.instructionNum].stage[m_cycles] = "D";
 
