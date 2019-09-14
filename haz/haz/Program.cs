@@ -131,8 +131,29 @@ namespace haz
 				regAvail.Add("r7", true);
 			}
 
+			bool flushEnabled = true;
+			bool flushYo = false;
+			int flushCounter = 0;
 			public void fetch()
 			{
+				if (flushEnabled)
+				{
+					if (flushYo)
+					{
+						// check that instruction previous to flush is in writeback stage
+						if (m_instState[flushCounter].stage[m_cycles] == "W")
+						{
+							// get out of flush
+							flushYo = false;
+							flushCounter = 0;
+						}
+
+						// return so we get the new instruction on the next iteration;
+						// we will then be past the writeback stage
+						return;
+					}
+				}
+
 				// fetch only if the queue is empty; we only have one fetch unit, 
 				// so we are not going to queue more than one fetched instruction
 				if (m_fetchQueue.Count == 0)
@@ -140,6 +161,33 @@ namespace haz
 					if (m_programCounter < m_instructions.Count)
 					{
 						Instruction instruction = m_instructions[m_programCounter];
+
+						if (flushEnabled)
+						{
+							// Data hazard detector
+							string dest = instruction.dest;
+							string src = instruction.src;
+							if (regAvail.ContainsKey(src))
+							{
+								if (!regAvail[src])
+								{
+									// don't enqueue, since we have a data hazard
+									Console.WriteLine("hello src");
+									flushYo = true;
+									flushCounter = m_programCounter - 1;
+									return;
+								}
+							}
+
+							if (!regAvail[dest])
+							{
+								// don't enqueue, since we have a data hazard
+								Console.WriteLine("hello dest");
+								flushYo = true;
+								flushCounter = m_programCounter - 1;
+								return;
+							}
+						}
 
 						// queue the instruction; the m_fetchQueue contains the instruction to be
 						// processed by the next stage -- decode
