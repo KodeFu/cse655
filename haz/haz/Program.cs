@@ -1,4 +1,18 @@
-﻿using System;
+﻿//
+// Hazard Detector
+//
+//   Description:
+//     Hazard Detector reads in a program, detects hazards and output two
+//     timing diagrams. First it outputs the timing diagram with flushes. This
+//     implies there is no hazard mitigation, so the pipeline is flushed. The
+//     second timing diagram is with the mitigation which is inserting stalls
+//     into the pipeline stages.
+//
+//   Author: 
+//     Mudit Vats (mpvats@syr.edu)
+//
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
