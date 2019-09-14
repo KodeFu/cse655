@@ -90,17 +90,31 @@ namespace haz
 		public class Pipeline
 		{
 			List<Instruction> m_instructions = null;
+			List<InstructionState> m_instState = new List<InstructionState>();
+
+			// Pipeline stages queues
+			Queue<Instruction> m_fetchQueue = new Queue<Instruction>();
+			Queue<Instruction> m_decodeQueue = new Queue<Instruction>();
+			Queue<Instruction> m_executeQueue = new Queue<Instruction>();
+			Queue<Instruction> m_memoryQueue = new Queue<Instruction>();
+			Queue<Instruction> m_writebackQueue = new Queue<Instruction>();
+
+			// Register availability status for r0-r7
+			Dictionary<string, bool> regAvail = new Dictionary<string, bool>(); 
+
 			int m_programCounter = 0;
 			int m_cycles = 0;
 			bool m_stall = false;
 
-			public class instructionState
+			const int MAX_CYCLES = 30;
+
+			public class InstructionState
 			{
 				// 100 is number of cycles
 				// each element is stage FDEMW
 				public List<string> stage = new List<string>();
 
-				public instructionState()
+				public InstructionState()
 				{
 					for (int i=0; i<100; i++)
 					{
@@ -108,17 +122,6 @@ namespace haz
 					}
 				}
 			}
-			public List<instructionState> m_instState = new List<instructionState>();
-
-			Queue<Instruction> m_fetchQueue = new Queue<Instruction>();
-			Queue<Instruction> m_decodeQueue = new Queue<Instruction>();
-			Queue<Instruction> m_executeQueue = new Queue<Instruction>();
-			Queue<Instruction> m_memoryQueue = new Queue<Instruction>();
-			Queue<Instruction> m_writebackQueue = new Queue<Instruction>();
-
-			Dictionary<string, bool> regAvail = new Dictionary<string, bool>(); // contains availability of r0-r1
-
-			const int MAX_CYCLES = 30;
 
 			public Pipeline(List<Instruction> instructions, bool stall)
 			{
@@ -204,7 +207,6 @@ namespace haz
 				else
 				{
 					m_instState[m_fetchQueue.Peek().instructionNum].stage[m_cycles] = "S";
-					//Console.WriteLine("fetch stalled");
 				}
 			}
 
@@ -223,7 +225,6 @@ namespace haz
 						m_instState[m_decodeQueue.Peek().instructionNum].stage[m_cycles] = "S";
 
 						// we are stalled because execute hasn't dequeued this yet
-						//Console.WriteLine("decode stalled");
 						return;
 					}
 
@@ -248,7 +249,6 @@ namespace haz
 						// instruction for the next stage
 						Instruction current = m_fetchQueue.Dequeue();
 						regAvail[dest] = false;
-						//regInternal[dest] = regValues[dest];
 
 						m_instState[current.instructionNum].stage[m_cycles] = "D";
 
@@ -269,7 +269,6 @@ namespace haz
 						m_instState[m_executeQueue.Peek().instructionNum].stage[m_cycles] = "S";
 
 						// we are stalled because memory stage hasn't dequeued this yet
-						//Console.WriteLine("execute stalled");
 						return;
 					}
 
@@ -300,7 +299,6 @@ namespace haz
 						m_instState[m_memoryQueue.Peek().instructionNum].stage[m_cycles] = "S";
 
 						// we are stalled because memory stage hasn't dequeued this yet
-						//Console.WriteLine("memory stalled");
 						return;
 					}
 
@@ -322,18 +320,13 @@ namespace haz
 					// do some instruction processing
 					Instruction peek = m_memoryQueue.Peek();
 					string dest = peek.dest;
-					//if (regAvail[dest])
-					{
-						// registers are clear, so we can dequeue fetchQueue and encode the 
-						// instruction for the next stage
-						Instruction current = m_memoryQueue.Dequeue();
-						regAvail[dest] = true;
-						//regInternal[dest] = regValues[dest];
 
-						m_instState[current.instructionNum].stage[m_cycles] = "W";
+					// registers are clear, so we can dequeue fetchQueue and encode the 
+					// instruction for the next stage
+					Instruction current = m_memoryQueue.Dequeue();
+					regAvail[dest] = true;
 
-						//Console.WriteLine(current.instruction);
-					}
+					m_instState[current.instructionNum].stage[m_cycles] = "W";
 				}
 			}
 
@@ -342,7 +335,7 @@ namespace haz
 
 				for (int i = 0; i < m_instructions.Count; i++)
 				{
-					instructionState newInstructionState = new instructionState();
+					InstructionState newInstructionState = new InstructionState();
 					m_instState.Add(newInstructionState);
 				}
 
