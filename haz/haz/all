@@ -1,0 +1,11 @@
+# Regsiter Data Hazards
+regr r0, r1   # register move register
+regi r0, 777  # register move immediate
+memr r0, r0   # memory move into rX = *rY
+memm r0, r0   # memory move out to *rX = rY 
+addr r0, r0   # rX = rY + rX
+subr r0, r0   # rX = rY - rX
+mulr r0, r0   # rX = rY * rX
+divr r0, r0   # rX = rY / rX
+modr r0, r0   # rX = rX % rY
+rand r0       # get a random number

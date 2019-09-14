@@ -22,7 +22,7 @@ using System.IO;
 namespace haz
 {
 	class Program
-	{
+	{ 
 		public class Instruction
 		{
 			public string instruction;
@@ -126,23 +126,23 @@ namespace haz
 			bool m_doStall = false;             // do stalls if true
 			bool m_flushPipeline = false;       // currently in flushing state
 			int m_flushInstructionNumber = 0;   // flush up to and including this instruction
-			const int MAX_CYCLES = 30;          // maximum number of cycles executed
+			int m_maxCycles = 30;    	        // holds max cycles passed in
 
 			public class InstructionState
 			{
 				// each element is stage FDEMW
 				public List<string> stage = new List<string>();
 
-				public InstructionState()
+				public void InstructionStateInitialize(int maxCycles)
 				{
-					for (int i=0; i<MAX_CYCLES; i++)
+					for (int i=0; i< maxCycles; i++)
 					{
 						stage.Add(".");
 					}
 				}
 			}
 
-			public Pipeline(List<Instruction> instructions, bool doStall)
+			public Pipeline(List<Instruction> instructions, bool doStall, int maxCycles)
 			{
 				m_instructions = instructions;
 
@@ -156,6 +156,7 @@ namespace haz
 				regAvail.Add("r7", 0);
 
 				m_doStall = doStall;
+				m_maxCycles = maxCycles;
 			}
 
 			public void fetch()
@@ -286,6 +287,7 @@ namespace haz
 						if (current.instruction != "memm")
 						{
 							regAvail[dest] = regAvail[dest] + 1;
+							//Console.WriteLine("c " + peek.instruction + " " + dest + ": " + regAvail[dest]);
 						}
 
 						m_instState[current.instructionNum].stage[m_cycles] = "D";
@@ -362,7 +364,11 @@ namespace haz
 					// registers are clear, so we can dequeue fetchQueue and encode the 
 					// instruction for the next stage
 					Instruction current = m_memoryQueue.Dequeue();
-					regAvail[dest] = regAvail[dest] - 1;
+					if (current.instruction != "memm")
+					{
+						regAvail[dest] = regAvail[dest] - 1;
+					}
+					//Console.WriteLine("wb " + peek.instruction + " " + dest + ": " + regAvail[dest]);
 
 					m_instState[current.instructionNum].stage[m_cycles] = "W";
 				}
@@ -374,11 +380,12 @@ namespace haz
 				for (int i = 0; i < m_instructions.Count; i++)
 				{
 					InstructionState newInstructionState = new InstructionState();
+					newInstructionState.InstructionStateInitialize(m_maxCycles);
 					m_instState.Add(newInstructionState);
 				}
 
 				// Run through pipeline
-				while (m_cycles < MAX_CYCLES)
+				while (m_cycles < m_maxCycles)
 				{
 					writeback();
 					memory();
@@ -397,18 +404,28 @@ namespace haz
 			{
 				if (!m_doStall)
 				{
+					Console.ForegroundColor = ConsoleColor.Red;
 					Console.WriteLine("Detect: Pipeline w/Flushes");
 				}
 				else
 				{
+					Console.ForegroundColor = ConsoleColor.Green;
 					Console.WriteLine("Solution: Pipeline w/Stalls");
 				}
+				Console.ResetColor();
 
 				for (int i = 0; i < m_instructions.Count; i++)
 				{
 					if (m_instructions[i].hazardPresent)
 					{
-						Console.ForegroundColor = ConsoleColor.Blue;
+						if (!m_doStall)
+						{
+							Console.ForegroundColor = ConsoleColor.Red;
+						}
+						else
+						{
+							Console.ForegroundColor = ConsoleColor.Green;
+						}
 					}
 					Console.Write(m_instructions[i].instruction + " ");
 					Console.Write(m_instructions[i].dest);
@@ -421,7 +438,7 @@ namespace haz
 						Console.Write("    \t");
 					}
 
-					for (int j = 0; j < MAX_CYCLES; j++)
+					for (int j = 0; j < m_maxCycles; j++)
 					{
 						Console.Write(m_instState[i].stage[j] + " ");
 					}
@@ -429,7 +446,7 @@ namespace haz
 					Console.ResetColor();
 				}
 
-				for (int j = 0; j < MAX_CYCLES; j++)
+				for (int j = 0; j < m_maxCycles; j++)
 				{
 					if (m_instState[m_instructions.Count - 1].stage[j] == "W")
 					{
@@ -443,11 +460,50 @@ namespace haz
 
 		static void Main(string[] args)
 		{
+			int maxCycles = 30;
+			string filename = String.Empty;
+
+			if (args.Count() == 0)
+			{
+				Console.WriteLine("Hazard Detector");
+				Console.WriteLine("haz filename <maxCycles>");
+				Console.WriteLine("  filename      filenames");
+				Console.WriteLine("  <maxCycles>   maximum pipeline cycles (optional)");
+				return;
+			}
+
+			if (args.Count() > 0)
+			{
+				filename = args[0];
+			}
+
+			if (args.Count() > 1)
+			{
+				if (!int.TryParse(args[1], out maxCycles))
+				{
+					maxCycles = 30;
+				}
+			}
+			
 			Console.WriteLine("Hazard Detector");
-			Console.WriteLine("File: " + args[0] + "\n");
+			Console.WriteLine("Filename:  " + filename);
+			Console.WriteLine("MaxCycles: " + maxCycles);
+			Console.WriteLine();
+			Console.WriteLine("Available Instructions (regs r0-r7):");
+			Console.WriteLine("  regr rX, rY   # reg to reg move");
+			Console.WriteLine("  regi rX, 777  # imm to reg move");
+			Console.WriteLine("  memr rX, rY   # mem to reg move, rX = *rY");
+			Console.WriteLine("  memm rX, rY   # reg to mem move, *rX = rY");
+			Console.WriteLine("  addr rX, rY   # rX = rY + rX");
+			Console.WriteLine("  subr rX, rY   # rX = rY - rX");
+			Console.WriteLine("  mulr rX, rY   # rX = rY * rX");
+			Console.WriteLine("  divr rX, rY   # rX = rY / rX");
+			Console.WriteLine("  modr rX, rY   # rX = rX % rY");
+			Console.WriteLine("  rand rX       # random number");
+			Console.WriteLine();
 
 			// Read file
-			string file = File.ReadAllText(args[0]);
+			string file = File.ReadAllText(filename);
 			string[] lines = file.Split('\n');
 
 			// Parse instruction lines and get valie instructions
@@ -466,12 +522,12 @@ namespace haz
 			}
 
 			// Run through pipeline w/flushes on data hazard
-			Pipeline pipeline = new Pipeline(validInstructions, false);
+			Pipeline pipeline = new Pipeline(validInstructions, false, maxCycles);
 			pipeline.doPipeline();
 			Console.WriteLine();
 
 			// Run through pipeline w/stalls on data hazard
-			pipeline = new Pipeline(validInstructions, true);
+			pipeline = new Pipeline(validInstructions, true, maxCycles);
 			pipeline.doPipeline();
 		}
 	}
