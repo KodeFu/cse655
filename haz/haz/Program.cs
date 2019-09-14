@@ -154,7 +154,7 @@ namespace haz
 				else
 				{
 					m_instState[m_fetchQueue.Peek().instructionNum].stage[m_cycles] = "S";
-					Console.WriteLine("fetch stalled");
+					//Console.WriteLine("fetch stalled");
 				}
 			}
 
@@ -173,7 +173,7 @@ namespace haz
 						m_instState[m_decodeQueue.Peek().instructionNum].stage[m_cycles] = "S";
 
 						// we are stalled because execute hasn't dequeued this yet
-						Console.WriteLine("decode stalled");
+						//Console.WriteLine("decode stalled");
 						return;
 					}
 
@@ -219,7 +219,7 @@ namespace haz
 						m_instState[m_executeQueue.Peek().instructionNum].stage[m_cycles] = "S";
 
 						// we are stalled because memory stage hasn't dequeued this yet
-						Console.WriteLine("execute stalled");
+						//Console.WriteLine("execute stalled");
 						return;
 					}
 
@@ -250,7 +250,7 @@ namespace haz
 						m_instState[m_memoryQueue.Peek().instructionNum].stage[m_cycles] = "S";
 
 						// we are stalled because memory stage hasn't dequeued this yet
-						Console.WriteLine("memory stalled");
+						//Console.WriteLine("memory stalled");
 						return;
 					}
 
@@ -282,7 +282,7 @@ namespace haz
 
 						m_instState[current.instructionNum].stage[m_cycles] = "W";
 
-						Console.WriteLine(current.instruction);
+						//Console.WriteLine(current.instruction);
 					}
 				}
 			}
