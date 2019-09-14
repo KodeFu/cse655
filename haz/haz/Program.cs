@@ -466,7 +466,7 @@ namespace haz
 			if (args.Count() == 0)
 			{
 				Console.WriteLine("Hazard Detector");
-				Console.WriteLine("haz filename <maxCycles>");
+				Console.WriteLine("Usage: haz filename <maxCycles>");
 				Console.WriteLine("  filename      filenames");
 				Console.WriteLine("  <maxCycles>   maximum pipeline cycles (optional)");
 				return;
