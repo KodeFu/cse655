@@ -5,4 +5,4 @@ addr r0, r1   # r0 = 25 + 10, r0 = 35
               # ** hazard since r1 used in previous instruction
 subr r1, r0   # r1 = 35 - 25, r1 = 10
               # ** hazard since r0 is used in previous instruction 
-rand r4       # r4 = rand()	
+rand r1       # r4 = rand()	

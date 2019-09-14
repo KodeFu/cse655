@@ -1,0 +1,5 @@
+# Regsiter Data Hazards
+addr r1, 10   # r0 = 10
+addr r1, 25   # r1 = 25
+addr r1, r1   # r0 = 25 + 10, r0 = 35 
+              # ** hazard since r1 needs WB from previous instruction

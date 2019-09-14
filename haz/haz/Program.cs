@@ -119,7 +119,7 @@ namespace haz
 			Queue<Instruction> m_writebackQueue = new Queue<Instruction>();
 
 			// Register availability status for r0-r7
-			Dictionary<string, bool> regAvail = new Dictionary<string, bool>(); 
+			Dictionary<string, int> regAvail = new Dictionary<string, int>(); 
 
 			int m_programCounter = 0;           // program counter
 			int m_cycles = 0;                   // current cycle
@@ -146,14 +146,14 @@ namespace haz
 			{
 				m_instructions = instructions;
 
-				regAvail.Add("r0", true);
-				regAvail.Add("r1", true);
-				regAvail.Add("r2", true);
-				regAvail.Add("r3", true);
-				regAvail.Add("r4", true);
-				regAvail.Add("r5", true);
-				regAvail.Add("r6", true);
-				regAvail.Add("r7", true);
+				regAvail.Add("r0", 0);
+				regAvail.Add("r1", 0);
+				regAvail.Add("r2", 0);
+				regAvail.Add("r3", 0);
+				regAvail.Add("r4", 0);
+				regAvail.Add("r5", 0);
+				regAvail.Add("r6", 0);
+				regAvail.Add("r7", 0);
 
 				m_doStall = doStall;
 			}
@@ -193,7 +193,7 @@ namespace haz
 							string src = instruction.src;
 							if (regAvail.ContainsKey(src))
 							{
-								if (!regAvail[src])
+								if (regAvail[src] > 0)
 								{
 									// hazard detected
 									instruction.hazardPresent = true;
@@ -205,7 +205,12 @@ namespace haz
 								}
 							}
 
-							if (!regAvail[dest])
+							if ((regAvail[dest] > 0) && 
+								((instruction.instruction != "regi") && 
+								(instruction.instruction != "regr")  && 
+								(instruction.instruction != "rand") &&
+								(instruction.instruction != "memr")
+								))
 							{
 								// hazard detected
 								instruction.hazardPresent = true;
@@ -258,7 +263,7 @@ namespace haz
 
 					if (regAvail.ContainsKey(src))
 					{
-						if (!regAvail[src])
+						if (regAvail[src] > 0)
 						{
 							// src not available so we are stalling...
 							m_instState[m_fetchQueue.Peek().instructionNum].stage[m_cycles] = "S";
@@ -266,7 +271,11 @@ namespace haz
 						}
 					}
 
-					if (regAvail[dest])
+					if ((regAvail[dest] == 0) || 
+						(peek.instruction == "regi") || 
+						(peek.instruction == "regr") || 
+						(peek.instruction == "rand") ||
+						(peek.instruction == "memr"))
 					{
 						// registers are clear, so we can dequeue fetchQueue and encode the 
 						// instruction for the next stage
@@ -276,7 +285,7 @@ namespace haz
 						// so, don't hold onto the register
 						if (current.instruction != "memm")
 						{
-							regAvail[dest] = false;
+							regAvail[dest] = regAvail[dest] + 1;
 						}
 
 						m_instState[current.instructionNum].stage[m_cycles] = "D";
@@ -353,7 +362,7 @@ namespace haz
 					// registers are clear, so we can dequeue fetchQueue and encode the 
 					// instruction for the next stage
 					Instruction current = m_memoryQueue.Dequeue();
-					regAvail[dest] = true;
+					regAvail[dest] = regAvail[dest] - 1;
 
 					m_instState[current.instructionNum].stage[m_cycles] = "W";
 				}
@@ -399,7 +408,7 @@ namespace haz
 				{
 					if (m_instructions[i].hazardPresent)
 					{
-						Console.ForegroundColor = ConsoleColor.Red;
+						Console.ForegroundColor = ConsoleColor.Blue;
 					}
 					Console.Write(m_instructions[i].instruction + " ");
 					Console.Write(m_instructions[i].dest);
