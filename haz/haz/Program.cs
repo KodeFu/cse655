@@ -89,7 +89,10 @@ namespace haz
 
 		public class Pipeline
 		{
+			// Valid instruction to execute
 			List<Instruction> m_instructions = null;
+
+			// Instruction state per cycle per instruction
 			List<InstructionState> m_instState = new List<InstructionState>();
 
 			// Pipeline stages queues
@@ -102,28 +105,28 @@ namespace haz
 			// Register availability status for r0-r7
 			Dictionary<string, bool> regAvail = new Dictionary<string, bool>(); 
 
-			int m_programCounter = 0;
-			int m_cycles = 0;
-			bool m_stall = false;
-
-			const int MAX_CYCLES = 30;
+			int m_programCounter = 0;           // program counter
+			int m_cycles = 0;                   // current cycle
+			bool m_doStall = false;             // do stalls if true
+			bool m_flushPipeline = false;       // currently in flushing state
+			int m_flushInstructionNumber = 0;   // flush up to and including this instruction
+			const int MAX_CYCLES = 30;          // maximum number of cycles executed
 
 			public class InstructionState
 			{
-				// 100 is number of cycles
 				// each element is stage FDEMW
 				public List<string> stage = new List<string>();
 
 				public InstructionState()
 				{
-					for (int i=0; i<100; i++)
+					for (int i=0; i<MAX_CYCLES; i++)
 					{
 						stage.Add(".");
 					}
 				}
 			}
 
-			public Pipeline(List<Instruction> instructions, bool stall)
+			public Pipeline(List<Instruction> instructions, bool doStall)
 			{
 				m_instructions = instructions;
 
@@ -136,23 +139,21 @@ namespace haz
 				regAvail.Add("r6", true);
 				regAvail.Add("r7", true);
 
-				m_stall = stall;
+				m_doStall = doStall;
 			}
 
-			bool flushYo = false;
-			int flushCounter = 0;
 			public void fetch()
 			{
-				if (!m_stall)
+				if (!m_doStall)
 				{
-					if (flushYo)
+					if (m_flushPipeline)
 					{
 						// check that instruction previous to flush is in writeback stage
-						if (m_instState[flushCounter].stage[m_cycles] == "W")
+						if (m_instState[m_flushInstructionNumber].stage[m_cycles] == "W")
 						{
 							// get out of flush
-							flushYo = false;
-							flushCounter = 0;
+							m_flushPipeline = false;
+							m_flushInstructionNumber = 0;
 						}
 
 						// return so we get the new instruction on the next iteration;
@@ -169,7 +170,7 @@ namespace haz
 					{
 						Instruction instruction = m_instructions[m_programCounter];
 
-						if (!m_stall)
+						if (!m_doStall)
 						{
 							// Data hazard detector
 							string dest = instruction.dest;
@@ -179,8 +180,8 @@ namespace haz
 								if (!regAvail[src])
 								{
 									// don't enqueue, since we have a data hazard
-									flushYo = true;
-									flushCounter = m_programCounter - 1;
+									m_flushPipeline = true;
+									m_flushInstructionNumber = m_programCounter - 1;
 									return;
 								}
 							}
@@ -188,8 +189,8 @@ namespace haz
 							if (!regAvail[dest])
 							{
 								// don't enqueue, since we have a data hazard
-								flushYo = true;
-								flushCounter = m_programCounter - 1;
+								m_flushPipeline = true;
+								m_flushInstructionNumber = m_programCounter - 1;
 								return;
 							}
 						}
@@ -332,14 +333,14 @@ namespace haz
 
 			public void doPipeline()
 			{
-
+				// Add instruction state for each intruction
 				for (int i = 0; i < m_instructions.Count; i++)
 				{
 					InstructionState newInstructionState = new InstructionState();
 					m_instState.Add(newInstructionState);
 				}
 
-
+				// Run through pipeline
 				while (m_cycles < MAX_CYCLES)
 				{
 					writeback();
@@ -351,12 +352,13 @@ namespace haz
 					m_cycles++;
 				}
 
+				// Done, show output
 				Display();
 			}
 
 			public void Display()
 			{
-				if (!m_stall)
+				if (!m_doStall)
 				{
 					Console.WriteLine("Detect: Pipeline w/Flushes");
 				}
