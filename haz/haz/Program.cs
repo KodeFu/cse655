@@ -407,13 +407,22 @@ namespace haz
 					Console.WriteLine();
 				}
 
+				for (int j = 0; j < MAX_CYCLES; j++)
+				{
+					if (m_instState[m_instructions.Count - 1].stage[j] == "W")
+					{
+						Console.Write("Total Cycles: " + (j + 1));
+						Console.WriteLine();
+						break;
+					}
+				}
 			}
 		}
 
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Hazard Detector");
-			Console.WriteLine("file: " + args[0] + "\n");
+			Console.WriteLine("File: " + args[0] + "\n");
 
 			// Read file
 			string file = File.ReadAllText(args[0]);
@@ -443,7 +452,5 @@ namespace haz
 			pipeline = new Pipeline(validInstructions, true);
 			pipeline.doPipeline();
 		}
-
-		
 	}
 }
