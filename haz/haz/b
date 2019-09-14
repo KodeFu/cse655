@@ -3,6 +3,6 @@ regi r0, 10   # r0 = 10
 regi r1, 25   # r1 = 25
 addr r0, r1   # r0 = 25 + 10, r0 = 35 
               # ** hazard since r1 needs WB from previous instruction
-rand r3       # r3 =  rand()
+rand r3, r7   # r3 =  rand()
 subr r1, r0   # r1 = 35 - 25, r1 = 10
               # ** maybe hazard, depending if wb happens before ID
