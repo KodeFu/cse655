@@ -503,7 +503,17 @@ namespace haz
 			Console.WriteLine();
 
 			// Read file
-			string file = File.ReadAllText(filename);
+			string file = String.Empty;
+			try
+			{
+				file = File.ReadAllText(filename);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Couldn't open file {0}, bailing!", filename);
+				return;
+			};
+
 			string[] lines = file.Split('\n');
 
 			// Parse instruction lines and get valie instructions
