@@ -1,0 +1,8 @@
+# Write Memory
+regi r0, 10   # r0 = 10
+regi r0, 25   # r1 = 25
+memm r3, r0   # *r3 = r0
+mulr r0, r3   # r0 = r3 * r0
+              # ** hazard, since previous instruction reads memory in the MEM, then uses WB to write value to r3
+rand r4       # r4 = rand()
+rand r5       # r4 = rand()
