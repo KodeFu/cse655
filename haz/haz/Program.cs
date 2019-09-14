@@ -92,6 +92,7 @@ namespace haz
 			List<Instruction> m_instructions = null;
 			int m_programCounter = 0;
 			int m_cycles = 0;
+			bool m_stall = false;
 
 			public class instructionState
 			{
@@ -117,7 +118,9 @@ namespace haz
 
 			Dictionary<string, bool> regAvail = new Dictionary<string, bool>(); // contains availability of r0-r1
 
-			public Pipeline(List<Instruction> instructions)
+			const int MAX_CYCLES = 30;
+
+			public Pipeline(List<Instruction> instructions, bool stall)
 			{
 				m_instructions = instructions;
 
@@ -129,14 +132,15 @@ namespace haz
 				regAvail.Add("r5", true);
 				regAvail.Add("r6", true);
 				regAvail.Add("r7", true);
+
+				m_stall = stall;
 			}
 
-			bool flushEnabled = true;
 			bool flushYo = false;
 			int flushCounter = 0;
 			public void fetch()
 			{
-				if (flushEnabled)
+				if (!m_stall)
 				{
 					if (flushYo)
 					{
@@ -162,7 +166,7 @@ namespace haz
 					{
 						Instruction instruction = m_instructions[m_programCounter];
 
-						if (flushEnabled)
+						if (!m_stall)
 						{
 							// Data hazard detector
 							string dest = instruction.dest;
@@ -172,7 +176,6 @@ namespace haz
 								if (!regAvail[src])
 								{
 									// don't enqueue, since we have a data hazard
-									Console.WriteLine("hello src");
 									flushYo = true;
 									flushCounter = m_programCounter - 1;
 									return;
@@ -182,7 +185,6 @@ namespace haz
 							if (!regAvail[dest])
 							{
 								// don't enqueue, since we have a data hazard
-								Console.WriteLine("hello dest");
 								flushYo = true;
 								flushCounter = m_programCounter - 1;
 								return;
@@ -345,7 +347,7 @@ namespace haz
 				}
 
 
-				while (m_cycles < 20)
+				while (m_cycles < MAX_CYCLES)
 				{
 					writeback();
 					memory();
@@ -361,14 +363,14 @@ namespace haz
 
 			public void Display()
 			{
-				StringBuilder sb = new StringBuilder();
-				/*
-				sb.Append("cycle " + m_cycles + ": ");
-				sb.Append("F" + m_fetchQueue.Count + " ");
-				sb.Append("D" + m_decodeQueue.Count + " ");
-				sb.Append("E" + m_executeQueue.Count + " ");
-				sb.Append("M" + m_memoryQueue.Count + " ");
-				Console.WriteLine(sb.ToString());*/
+				if (!m_stall)
+				{
+					Console.WriteLine("Detect: Pipeline w/Flushes");
+				}
+				else
+				{
+					Console.WriteLine("Solution: Pipeline w/Stalls");
+				}
 
 				for (int i = 0; i < m_instructions.Count; i++)
 				{
@@ -383,7 +385,7 @@ namespace haz
 						Console.Write("    \t");
 					}
 
-					for (int j = 0; j < 20; j++)
+					for (int j = 0; j < MAX_CYCLES; j++)
 					{
 						Console.Write(m_instState[i].stage[j] + " ");
 					}
@@ -395,7 +397,8 @@ namespace haz
 
 		static void Main(string[] args)
 		{
-			Console.WriteLine("file: " + args[0]);
+			Console.WriteLine("Hazard Detector");
+			Console.WriteLine("file: " + args[0] + "\n");
 
 			// Read file
 			string file = File.ReadAllText(args[0]);
@@ -416,8 +419,13 @@ namespace haz
 				}
 			}
 
-			// Run through pipeline
-			Pipeline pipeline = new Pipeline(validInstructions);
+			// Run through pipeline w/flushes on data hazard
+			Pipeline pipeline = new Pipeline(validInstructions, false);
+			pipeline.doPipeline();
+			Console.WriteLine();
+
+			// Run through pipeline w/stalls on data hazard
+			pipeline = new Pipeline(validInstructions, true);
 			pipeline.doPipeline();
 		}
 
