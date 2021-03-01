@@ -1,3 +1,5 @@
 # CSE655 Advanced Computer Architecture
 
-Labs for Computer Architecture course.
+Labs for Advanced Computer Architecture course.
+
+Syracuse University
